@@ -7,7 +7,7 @@ title: 马面的部落格
 subtitle:
 description:
 author:  mark
-language:
+language: zh-Hans
 timezone:
 
 # URL
@@ -39,8 +39,8 @@ relative_link: false
 future: true
 highlight:
   enable: true
-  line_number: true
-  auto_detect: false
+  line_number: false  #代码行号
+  auto_detect: false  #自动识别高亮
   tab_replace:
 
 # Home page setting
@@ -72,11 +72,32 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: landscape
+# theme: landscape
+theme: next
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
-eploy:
+deploy:
   type: git
-  repo: https://github.com/magaofei/magaofei.github.io.git
+  repo: https://github.com/whoknowyou/magaofei.github.io.git
   branch: master
+
+#icon
+avatar: /uploads/avatar.jpg
+
+#Rss
+feed:
+  type: atom
+  path: atom.xml
+  limit: 20
+  hub:
+
+#disqus_shortname: your-disqus-shortname
+disqus_shortname: magaofei
+
+#local search
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 10000

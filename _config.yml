@@ -86,12 +86,18 @@ deploy:
 #icon
 avatar: /uploads/avatar.jpg
 
-#Rss
-feed:
-  type: atom
-  path: atom.xml
-  limit: 20
-  hub:
+# 底部社交链接
+social:
+  email: mamian521#email.com
+
+rss: default
+
+# #Rss
+# feed:
+#   type: atom
+#   path: atom.xml
+#   limit: 20
+#   hub:
 
 #disqus_shortname: your-disqus-shortname
 disqus_shortname: magaofei
@@ -102,3 +108,9 @@ search:
   field: post
   format: html
   limit: 10000
+
+
+# 访问量统计
+leancloud:
+  app_id: U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz
+  app_key: 1i3I2spUT9rGlts0cWBGKLsv

@@ -9,6 +9,7 @@ script:
   - hexo cl  #清除
   # - git clone https://github.com/theme-next/hexo-theme-next themes/next  # 增加 next
   - git clone https://github.com/ahonn/hexo-theme-even themes/even
+  - mv even_theme.yml themes/even/_config.yml
   - hexo g  #生成
 
 after_script:
@@ -19,6 +20,7 @@ after_script:
   - git add .
   - git commit -m "update"
   - git push --force --quiet "https://${GitHub_Blog}@${GH_REF}" master:master  #GH_TOKEN是在Travis中配置token的名称
+
 
 branches:
   only:

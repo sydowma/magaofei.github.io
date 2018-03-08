@@ -87,10 +87,6 @@ deploy:
 # avatar: /uploads/avatar.jpg
 
 # 底部社交链接
-social:
-  email: mamian521#email.com
-
-rss: default
 
 # #Rss
 # feed:
@@ -100,7 +96,6 @@ rss: default
 #   hub:
 
 #disqus_shortname: your-disqus-shortname
-disqus_shortname: wantme
 
 #local search
 # search:
@@ -110,7 +105,3 @@ disqus_shortname: wantme
 #   limit: 10000
 
 
-# 访问量统计
-leancloud: 
-  app_id: U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz
-  app_key: 1i3I2spUT9rGlts0cWBGKLsv

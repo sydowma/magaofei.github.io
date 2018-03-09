@@ -4,15 +4,15 @@
 
 # Site
 title: 马面的部落格
-subtitle:
-description:
+subtitle: blog
+description: Greetings
 author:  mark
 language: zh-CN
 timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: magaofei.github.io
+url: https://magaofei.github.io
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:

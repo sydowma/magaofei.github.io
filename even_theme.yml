@@ -77,7 +77,7 @@ baidu_analytics:
 baidu_verification:
 
 # Google Analytics
-google_analytics:
+google_analytics: UA-86730422-1
 # Google Verification
 google_verification:
 

@@ -1,0 +1,48 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the hexo branch
+  push:
+    branches: [ hexo ]
+  pull_request:
+    branches: [ hexo ]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: echo Hello, world!
+
+      - name: Use Node.js 14.15.1
+        uses: actions/setup-node@v1
+        with:
+          version: 14.15.1
+      - name: build
+        run: |
+          npm install
+          hexo cl  #清除
+          git clone https://github.com/ahonn/hexo-theme-even themes/even
+          mv even_theme.yml themes/even/_config.yml
+          hexo g  #生成
+          cd ./public
+          git init
+          git config user.name "magaofei"  #修改name
+          git config user.email "mamian521@gmail.com"  #修改email
+          git add .
+          git commit -m "update"
+          git push --force --quiet "https://${{ secrets.DEPLOY_BLOG }}@github.com/magaofei/magaofei.github.io.git" master:master

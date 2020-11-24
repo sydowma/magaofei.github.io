@@ -34,9 +34,10 @@ jobs:
           version: 14.15.1
       - name: build
         run: |
+          npm i -g hexo-cli
           npm install
           hexo cl  #清除
-          git clone https://github.com/ahonn/hexo-theme-even themes/even
+          git clone --depth=2 https://github.com/ahonn/hexo-theme-even themes/even
           mv even_theme.yml themes/even/_config.yml
           hexo g  #生成
           cd ./public

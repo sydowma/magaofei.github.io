@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="使用Java语言和Docker实现一套简易的CI工具"/><link rel="alternate" href="/atom.xml" title="马面的部落格"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.6.0" />
+<link rel="canonical" href="https://magaofei.github.io/2021/02/06/60. 使用Java语言和Docker实现一套简易CI工具/"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.6.0" />
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-86730422-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-86730422-1');
+</script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz",
+      appKey: "1i3I2spUT9rGlts0cWBGKLsv"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz","app_key":"1i3I2spUT9rGlts0cWBGKLsv"},"toc":"","fancybox":"","pjax":"","latex":""};
+</script>
+
+    <title>使用Java语言和Docker实现一套简易的CI工具 - 马面的部落格</title>
+  <meta name="generator" content="Hexo 4.2.1"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">马面的部落格</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">首页
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">归档
+          </li>
+      </a><a href="/tags">
+        <li class="mobile-menu-item">标签
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">马面的部落格</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            首页
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            归档
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            标签
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">使用Java语言和Docker实现一套简易的CI工具
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2021-02-06
+        </span><span class="post-visits"
+             data-url="/2021/02/06/60.%20%E4%BD%BF%E7%94%A8Java%E8%AF%AD%E8%A8%80%E5%92%8CDocker%E5%AE%9E%E7%8E%B0%E4%B8%80%E5%A5%97%E7%AE%80%E6%98%93CI%E5%B7%A5%E5%85%B7/"
+             data-title="使用Java语言和Docker实现一套简易的CI工具">
+          阅读次数 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><p>在现在有许多CI产品，例如 GitLab Runner 、GitHub Action 、Travis CI 等，本文将模拟 GitHub Action ，实现一套最简单的 CI 。</p>
+<p>CI 的执行器主要分2种情况，针对于 Windows/macOS 平台，执行方式为 Shell ，对于 Linux 平台，执行方式为 Docker，今天这里主要讨论后者。</p>
+<p>代码已开放到 GitHub ，欢迎 Star</p>
+<p><a href="https://github.com/magaofei/expert-ci" target="_blank" rel="noopener">https://github.com/magaofei/expert-ci</a></p>
+<h2 id="要素"><a href="#要素" class="headerlink" title="要素"></a>要素</h2><p>其实要做的不过于2点，如下</p>
+<ul>
+<li>解析配置文件</li>
+<li>动态执行销毁容器或Shell</li>
+</ul>
+<p>Docker出现之后，过去的Jenkins上利用虚拟机执行Shell的方式会被替代，你问我为什么会被替代？举个例子，如果我要跑多个语言版本的单元测试或者脚本，过去要维护多个环境，人力成本高，且资源利用程度低。切换为容器之后，只需要独立出来一个进程，维护成本变低了。</p>
+<p>所以CI工具执行，我理解为是一个容器的执行过程。</p>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>为什么用Java语言？</p>
+<p>Docker本身是用Go语言写的，不过其对外暴露了API，我们可以使用接口的方式去调用，和语言无关，我本身比较熟悉Java，所以使用Java语言来做。</p>
+<p>不再造轮子，我直接使用 <code>com.github.docker-java</code> 这个库来操作Docker</p>
+<h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><p>能够执行单个 Job 任务，能够执行 run 里边的命令</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>主要分为5个步骤</p>
+<ol>
+<li>安装依赖</li>
+<li>定义实体类</li>
+<li>解析配置文件</li>
+<li>生成Dockerfile</li>
+<li>执行容器任务</li>
+</ol>
+<h3 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h3><figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">  &lt;groupId&gt;com.github.docker-java&lt;/groupId&gt;</span><br><span class="line">  &lt;artifactId&gt;docker-java&lt;/artifactId&gt;</span><br><span class="line">  &lt;!-- use latest version &lt;https:<span class="comment">//github.com/docker-java/docker-java/releases&gt; --&gt;</span></span><br><span class="line">  &lt;version&gt;3.2.7&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<p>用 Jackson 来解析 Yaml</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;com.fasterxml.jackson.dataformat&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;jackson-dataformat-yaml&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;2.12.1&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;jackson-databind&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;2.12.1&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<p>用 JUnit4做单元测试</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;junit&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;junit&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;4.13&lt;/version&gt;</span><br><span class="line">    &lt;scope&gt;test&lt;/scope&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="定义实体类"><a href="#定义实体类" class="headerlink" title="定义实体类"></a>定义实体类</h3><p>这里模拟 GitHub Action 定义一个实体，这里只是部分实现。为了方便浏览，我把多余的 setter getter 方法已去掉。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ActionConfig</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> On on;</span><br><span class="line">    <span class="keyword">private</span> Map&lt;String, String&gt; env;</span><br><span class="line">    <span class="keyword">private</span> LinkedHashMap&lt;String <span class="comment">/* build name*/</span>, Job&gt; jobs;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">On</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> Branch push;</span><br><span class="line">        <span class="meta">@JsonProperty</span>(<span class="string">"pull_request"</span>)</span><br><span class="line">        <span class="keyword">private</span> Branch pullRequest;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Branch</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> List&lt;String&gt; branches;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Job</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> String name;</span><br><span class="line">        <span class="keyword">private</span> List&lt;String&gt; needs;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* equals image name*/</span></span><br><span class="line">        <span class="meta">@JsonProperty</span>(<span class="string">"runs-on"</span>)</span><br><span class="line">        <span class="keyword">private</span> String runsOn;</span><br><span class="line">        <span class="keyword">private</span> Map&lt;String, String&gt; environment;</span><br><span class="line">        <span class="keyword">private</span> List&lt;Step&gt; steps;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Step</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> String name;</span><br><span class="line">        <span class="keyword">private</span> List&lt;String&gt; run;</span><br><span class="line">        <span class="comment">/* environment for step TODO impl */</span></span><br><span class="line">        <span class="keyword">private</span> Map&lt;String, String&gt; with;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="解析配置文件"><a href="#解析配置文件" class="headerlink" title="解析配置文件"></a>解析配置文件</h3><p>这里直接用 Jackson 的方法解析 Yaml 文件，转换为实体</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">YamlConfigParser</span> <span class="keyword">implements</span> <span class="title">ConfigParser</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger logger = LoggerFactory.getLogger(YamlConfigParser<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ObjectMapper OM = <span class="keyword">new</span> ObjectMapper(<span class="keyword">new</span> YAMLFactory());</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ActionConfig <span class="title">parser</span><span class="params">(InputStream inputStream)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        ActionConfig actionConfig = <span class="keyword">new</span> ActionConfig();</span><br><span class="line">        <span class="comment">// 转换实体类</span></span><br><span class="line">        actionConfig = OM.readValue(inputStream, ActionConfig<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        <span class="keyword">return</span> actionConfig;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="生成Dockerfile"><a href="#生成Dockerfile" class="headerlink" title="生成Dockerfile"></a>生成Dockerfile</h3><p>在生成 Dockerfile 之前，我再定义一个实体，用来存储 Docker 配置信息，这里只是简单实现，所以我没有写其他的属性信息。</p>
+<h4 id="DockerConfig"><a href="#DockerConfig" class="headerlink" title="DockerConfig"></a>DockerConfig</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DockerConfig</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Map&lt;String, String&gt; volume;</span><br><span class="line">    <span class="keyword">private</span> String image;</span><br><span class="line">    <span class="keyword">private</span> Set&lt;String&gt; tag;</span><br><span class="line">    <span class="keyword">private</span> String dockerfile;</span><br><span class="line">    <span class="keyword">private</span> String path;</span><br><span class="line">    <span class="keyword">private</span> List&lt;String&gt; runs;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再增加一个从实体转换和生成 Dockerfile 的方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> DockerConfig <span class="title">convert</span><span class="params">(ActionConfig actionConfig)</span> </span>&#123;</span><br><span class="line">        DockerConfig dockerConfig = <span class="keyword">new</span> DockerConfig();</span><br><span class="line">        Set&lt;String&gt; tag = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        dockerConfig.setTag(tag);</span><br><span class="line">        <span class="keyword">for</span> (Map.Entry&lt;String, ActionConfig.Job&gt; jobEntry : actionConfig.getJobs().entrySet()) &#123;</span><br><span class="line">            String buildName = jobEntry.getKey();</span><br><span class="line">            tag.add(buildName);</span><br><span class="line"></span><br><span class="line">            ActionConfig.Job job = jobEntry.getValue();</span><br><span class="line">            <span class="keyword">if</span> (job.getSteps().isEmpty()) &#123;</span><br><span class="line">                <span class="keyword">return</span> dockerConfig;</span><br><span class="line">            &#125;</span><br><span class="line"><span class="comment">// Docker Image 和 tag 用 : 分隔</span></span><br><span class="line">            dockerConfig.setImage(job.getRunsOn().replace(<span class="string">"-"</span>, <span class="string">":"</span>));</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> (ActionConfig.Step step : job.getSteps()) &#123;</span><br><span class="line">                dockerConfig.getRuns().addAll((step.getRun()));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        dockerConfigConvertToDockerfile(dockerConfig);</span><br><span class="line">        <span class="keyword">return</span> dockerConfig;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 生成 Dockerfile</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">dockerConfigConvertToDockerfile</span><span class="params">(DockerConfig dockerConfig)</span> </span>&#123;</span><br><span class="line">        List&lt;String&gt; runs = dockerConfig.getRuns();</span><br><span class="line">        String cmd = String.join(<span class="string">" &amp;&amp; "</span>, runs);</span><br><span class="line">        String dockerfile = String.format(</span><br><span class="line">                <span class="string">"FROM %s\\n"</span> +</span><br><span class="line">                        <span class="string">"CMD /bin/sh -c \\"</span> %s \\<span class="string">""</span>, dockerConfig.getImage(), cmd);</span><br><span class="line">        dockerConfig.setDockerfile(dockerfile);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="执行容器任务"><a href="#执行容器任务" class="headerlink" title="执行容器任务"></a>执行容器任务</h3><p>把 Dockerfile 写入到文件中</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Path <span class="title">initDockerfile</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">        Path build = Paths.get(<span class="string">"build"</span>);</span><br><span class="line">        Path dockerfilePath = Paths.get(<span class="string">"build"</span>, <span class="string">"Dockerfile"</span>);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Files.createDirectory(build);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (FileAlreadyExistsException ignore) &#123;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Files.write(dockerfilePath, <span class="keyword">this</span>.dockerConfig.getDockerfile().getBytes(StandardCharsets.UTF_8));</span><br><span class="line">        <span class="keyword">return</span> dockerfilePath;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>初始化 Docker 配置</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DockerExecutor</span> <span class="keyword">implements</span> <span class="title">Executor</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger logger = LoggerFactory.getLogger(DockerExecutor<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> DockerConfig dockerConfig;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> DockerClient dockerClient;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> CreateContainerResponse containerResponse;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String imageId;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始化 Docker 配置，这里默认设置的是当前机器的 docker.sock 的路径</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(ActionConfig actionConfig)</span> </span>&#123;</span><br><span class="line">        DockerClientConfig standard = DefaultDockerClientConfig.createDefaultConfigBuilder().build();</span><br><span class="line">        DockerHttpClient httpClient = <span class="keyword">new</span> ApacheDockerHttpClient.Builder().dockerHost(standard.getDockerHost()).sslConfig(standard.getSSLConfig()).build();</span><br><span class="line">        <span class="keyword">this</span>.dockerClient = DockerClientImpl.getInstance(standard, httpClient);</span><br><span class="line">        <span class="keyword">this</span>.dockerConfig = ActionToDocker.convert(actionConfig);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">this</span>.runContainer();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            logger.warn(<span class="string">" e"</span>, e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ....</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接下来主要是调用容器的 build 和 run</p>
+<p>build</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">buildImage</span><span class="params">(Path dockerfilePath)</span> </span>&#123;</span><br><span class="line">        SampleBuildImageResultCallback sampleBuildImageResultCallback = <span class="keyword">new</span> SampleBuildImageResultCallback();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">this</span>.imageId = <span class="keyword">this</span>.dockerClient.buildImageCmd()</span><br><span class="line">                    .withTags(<span class="keyword">this</span>.dockerConfig.getTag())</span><br><span class="line">                    .withPull(<span class="keyword">true</span>)</span><br><span class="line">                    .withBaseDirectory(dockerfilePath.getParent().toFile())</span><br><span class="line">                    .withDockerfile(dockerfilePath.toFile())</span><br><span class="line">                    .exec(sampleBuildImageResultCallback)</span><br><span class="line">                    .awaitImageId();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            logger.warn(<span class="string">"build image error "</span>, e);</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>run</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">runContainer</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">        Path dockerfilePath = <span class="keyword">this</span>.initDockerfile();</span><br><span class="line">        <span class="keyword">this</span>.buildImage(dockerfilePath);</span><br><span class="line">        CreateContainerResponse containerResponse;</span><br><span class="line">        HostConfig hostConfig = <span class="keyword">new</span> HostConfig();</span><br><span class="line">        List&lt;Bind&gt; bindList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="comment">// docker volume 挂载</span></span><br><span class="line">        <span class="keyword">for</span> (Map.Entry&lt;String, String&gt; entry : <span class="keyword">this</span>.dockerConfig.getVolume().entrySet()) &#123;</span><br><span class="line">            String host = entry.getKey();</span><br><span class="line">            String containerVolume = entry.getValue();</span><br><span class="line">            bindList.add(<span class="keyword">new</span> Bind(host, <span class="keyword">new</span> Volume(containerVolume)));</span><br><span class="line">        &#125;</span><br><span class="line">        hostConfig.withBinds(bindList);</span><br><span class="line">        <span class="comment">// 启动</span></span><br><span class="line">        <span class="keyword">try</span> (CreateContainerCmd createContainerCmd = <span class="keyword">this</span>.dockerClient.createContainerCmd(<span class="keyword">this</span>.imageId)) &#123;</span><br><span class="line">            containerResponse = createContainerCmd</span><br><span class="line">                    .withHostConfig(hostConfig)</span><br><span class="line">                    .withTty(<span class="keyword">true</span>)</span><br><span class="line">                    .exec();</span><br><span class="line">            <span class="keyword">this</span>.dockerClient.startContainerCmd(containerResponse.getId()).exec();</span><br><span class="line">            <span class="keyword">this</span>.containerResponse = containerResponse;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 日志输出</span></span><br><span class="line">            showLog(dockerClient, containerResponse.getId(), <span class="keyword">true</span>, <span class="number">1</span>, <span class="keyword">new</span> LogContainerCallback() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onNext</span><span class="params">(Frame frame)</span> </span>&#123;</span><br><span class="line">                    String message = <span class="keyword">new</span> String(frame.getPayload());</span><br><span class="line">                    logger.info(<span class="string">"&#123;&#125;"</span>, message);</span><br><span class="line">                    <span class="keyword">super</span>.onNext(frame);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line"></span><br><span class="line">            logger.info(<span class="string">"wait container cmd"</span>);</span><br><span class="line">            <span class="comment">// 等待容器执行完毕，设置超时时间为30分钟</span></span><br><span class="line">            <span class="keyword">try</span> (WaitContainerResultCallback waitContainerResultCallback = <span class="keyword">new</span> WaitContainerResultCallback()) &#123;</span><br><span class="line">                <span class="keyword">int</span> exitCode = dockerClient.waitContainerCmd(containerResponse.getId()).exec(waitContainerResultCallback)</span><br><span class="line">                        .awaitStatusCode(<span class="number">30</span>, TimeUnit.MINUTES);</span><br><span class="line">                logger.info(<span class="string">"exitCode = &#123;&#125;"</span>, exitCode);</span><br><span class="line">                <span class="keyword">if</span> (exitCode != <span class="number">0</span>) &#123;</span><br><span class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"exit = "</span> + exitCode);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="comment">// 结束时，销毁容器，删除镜像</span></span><br><span class="line">            <span class="keyword">this</span>.stop();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>停止容器的运行和删除镜像</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">this</span>.containerResponse != <span class="keyword">null</span>) &#123;</span><br><span class="line">                logger.info(<span class="string">"start stop container"</span>);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    dockerClient.stopContainerCmd(<span class="keyword">this</span>.containerResponse.getId()).exec();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (NotModifiedException e) &#123;</span><br><span class="line">                    logger.warn(<span class="string">"Container already stopped"</span>);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                logger.info(<span class="string">"end stop container"</span>);</span><br><span class="line"></span><br><span class="line">                logger.info(<span class="string">"start remove container id = &#123;&#125;"</span>, <span class="keyword">this</span>.containerResponse.getId());</span><br><span class="line">                dockerClient.removeContainerCmd(<span class="keyword">this</span>.containerResponse.getId()).exec();</span><br><span class="line">            &#125;</span><br><span class="line">            logger.info(<span class="string">"start remove image id = &#123;&#125;"</span>, <span class="keyword">this</span>.imageId);</span><br><span class="line">            dockerClient.removeImageCmd(<span class="keyword">this</span>.imageId).exec();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            logger.warn(<span class="string">" e"</span>, e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>到这里基本上就结束了，看起来很简单，找一个用例试一下。</p>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>这个配置文件的内容很简单，会基于 ubuntu:latest  这个版本的镜像做基础，在这个上面执行相关命令。主要有4个命令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> Hello, world!</span><br><span class="line">apt-get update -y</span><br><span class="line">apt-get install -y git</span><br><span class="line">git <span class="built_in">clone</span> &lt;https://github.com/magaofei/expert-ci.git&gt;</span><br><span class="line">name: CI</span><br><span class="line">on:</span><br><span class="line">  push:</span><br><span class="line">    branches: [ hexo ]</span><br><span class="line">  pull_request:</span><br><span class="line">    branches: []</span><br><span class="line"></span><br><span class="line"><span class="comment">## A workflow run is made up of one or more jobs that can run sequentially or in parallel</span></span><br><span class="line"><span class="built_in">jobs</span>:</span><br><span class="line">  <span class="comment"># This workflow contains a single job called "build"</span></span><br><span class="line">  build:</span><br><span class="line">    <span class="comment"># The type of runner that the job will run on</span></span><br><span class="line">    runs-on: ubuntu-latest</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Steps represent a sequence of tasks that will be executed as part of the job</span></span><br><span class="line">    steps:</span><br><span class="line">      <span class="comment"># Runs a single command using the runners shell</span></span><br><span class="line">      - name: Run a one-line script</span><br><span class="line">        run:</span><br><span class="line">          - <span class="built_in">echo</span> Hello, world!</span><br><span class="line"></span><br><span class="line">      - name: build</span><br><span class="line">        run:</span><br><span class="line">          - apt-get update -y</span><br><span class="line">          - apt-get install -y git</span><br><span class="line">          - git <span class="built_in">clone</span> &lt;https://github.com/magaofei/expert-ci.git&gt;</span><br></pre></td></tr></table></figure>
+<p>执行结果</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Step 1/2 : FROM ubuntu:latest</span><br><span class="line"></span><br><span class="line"> ---&gt; f643c72bc252</span><br><span class="line"></span><br><span class="line">Step 2/2 : CMD /bin/sh -c <span class="string">" echo Hello, world! &amp;&amp; apt-get update -y &amp;&amp; apt-get install -y git &amp;&amp; git clone &lt;https://github.com/magaofei/expert-ci.git&gt; "</span></span><br><span class="line"></span><br><span class="line"> ---&gt; Running <span class="keyword">in</span> 8602bb97fd46</span><br><span class="line"></span><br><span class="line">Removing intermediate container 8602bb97fd46</span><br><span class="line"></span><br><span class="line"> ---&gt; b4de22f20e13</span><br><span class="line"></span><br><span class="line">Successfully built b4de22f20e13</span><br><span class="line"></span><br><span class="line">Successfully tagged build:latest</span><br><span class="line"></span><br><span class="line">build image finish</span><br><span class="line"></span><br><span class="line">H</span><br><span class="line">ello, world!</span><br><span class="line"></span><br><span class="line">.....</span><br><span class="line"></span><br><span class="line"><span class="keyword">done</span>.</span><br><span class="line"></span><br><span class="line">Cloning into <span class="string">'expert-ci'</span>...</span><br><span class="line"></span><br><span class="line">remote: Enumerating objects: 69, <span class="keyword">done</span>.</span><br><span class="line"></span><br><span class="line">remote: Counting objects:</span><br><span class="line">remote: Counting objects:  71% (49/69)</span><br><span class="line">remote: Counting objects: 100% (69/69), <span class="keyword">done</span>.</span><br><span class="line"></span><br><span class="line">remote: Compressing objects:  65% (23/35)[</span><br><span class="line">remote: Compressing objects: 100% (35/35), <span class="keyword">done</span>.</span><br><span class="line"></span><br><span class="line">remote: Total 69 (delta 17), reused 65 (delta 16), pack-reused 0</span><br><span class="line"></span><br><span class="line">Unpacking objects:  78% (54/69)</span><br><span class="line">Unpacking objects: 100% (69/69), 17.57 KiB | 408.00 KiB/s, <span class="keyword">done</span>.</span><br><span class="line"></span><br><span class="line">exitCode = 0</span><br><span class="line">start stop container</span><br><span class="line"></span><br><span class="line">end stop container</span><br><span class="line">start remove container id = 3a5a4b7519f649a48334a2c43952a79ecb1f87a9255f3cc9ac1d168465f11078</span><br><span class="line">start remove image id = b4de22f20e13</span><br><span class="line"></span><br><span class="line">Process finished with <span class="built_in">exit</span> code 0</span><br></pre></td></tr></table></figure>
+<p>可以看到，克隆代码的命令已经成功执行结束了，后边也可以去执行更多的指令。</p>
+<p>至此，一个极简版本的CI工具就完成了。</p>
+<p>后续可以支持更多功能，比如增加页面展示，根据分支触发任务执行，支持多个 job、stage 等等。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>容器是一个划时代产物。</p>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://magaofei.github.io">mark</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://magaofei.github.io/2021/02/06/60.%20%E4%BD%BF%E7%94%A8Java%E8%AF%AD%E8%A8%80%E5%92%8CDocker%E5%AE%9E%E7%8E%B0%E4%B8%80%E5%A5%97%E7%AE%80%E6%98%93CI%E5%B7%A5%E5%85%B7/">https://magaofei.github.io/2021/02/06/60.%20%E4%BD%BF%E7%94%A8Java%E8%AF%AD%E8%A8%80%E5%92%8CDocker%E5%AE%9E%E7%8E%B0%E4%B8%80%E5%A5%97%E7%AE%80%E6%98%93CI%E5%B7%A5%E5%85%B7/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        
+        <nav class="post-nav"><a class="prev" href="/2021/03/01/52.%E4%B8%80%E5%85%A5%20Java%20%E6%B7%B1%E4%BC%BC%E6%B5%B7/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">52.一入 Java 深似海</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    <a class="next" href="/2020/11/24/59.%20%E5%88%A9%E7%94%A8%20GitHub%20Action%20%E5%8F%91%E5%B8%83%20Hexo%20%E5%8D%9A%E5%AE%A2/">
+        <span class="next-text nav-default">利用 GitHub Action 发布 Hexo 博客 GitHub Pages</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"><div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:mamian521#email.com" class="iconfont icon-email" title="email"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">mark</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://magaofei.github.io/2021/02/06/60.%20%E4%BD%BF%E7%94%A8Java%E8%AF%AD%E8%A8%80%E5%92%8CDocker%E5%AE%9E%E7%8E%B0%E4%B8%80%E5%A5%97%E7%AE%80%E6%98%93CI%E5%B7%A5%E5%85%B7/';
+        this.page.identifier = '2021/02/06/60. 使用Java语言和Docker实现一套简易CI工具/';
+        this.page.title = '使用Java语言和Docker实现一套简易的CI工具';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//wantme.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.6.0"></script>
+</body>
+</html>

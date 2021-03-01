@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="sqlite for iOS犯的错2016年12月21日"/><link rel="alternate" href="/atom.xml" title="马面的部落格"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.6.0" />
+<link rel="canonical" href="https://magaofei.github.io/2016/12/21/29. sqlite-for-iOS犯的错2016年12月21日/"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.6.0" />
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-86730422-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-86730422-1');
+</script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz",
+      appKey: "1i3I2spUT9rGlts0cWBGKLsv"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz","app_key":"1i3I2spUT9rGlts0cWBGKLsv"},"toc":"","fancybox":"","pjax":"","latex":""};
+</script>
+
+    <title>sqlite for iOS犯的错2016年12月21日 - 马面的部落格</title>
+  <meta name="generator" content="Hexo 4.2.1"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">马面的部落格</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">首页
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">归档
+          </li>
+      </a><a href="/tags">
+        <li class="mobile-menu-item">标签
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">马面的部落格</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            首页
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            归档
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            标签
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">sqlite for iOS犯的错2016年12月21日
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016-12-21
+        </span><span class="post-visits"
+             data-url="/2016/12/21/29.%20sqlite-for-iOS%E7%8A%AF%E7%9A%84%E9%94%992016%E5%B9%B412%E6%9C%8821%E6%97%A5/"
+             data-title="sqlite for iOS犯的错2016年12月21日">
+          阅读次数 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><ol>
+<li><p>Sql语句里的<code>values</code>少了<code>s</code></p>
+<p>使用了<code>NSLog(@&quot;%s&quot;, sqlite3_errmsg(_db));</code>才发现错误,</p>
+<p> 原因是<code>NSLog(@&quot;%s&quot;, sqlite3_errmsg(_db));</code></p>
+</li>
+<li><p><code>sqlite3_column_text</code>写成<code>sqlite3_column_int64</code></p>
+</li>
+</ol>
+<ol>
+<li>NSMutableArray延迟加载写的不对</li>
+</ol>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line">- (<span class="keyword">instancetype</span>)init &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">self</span> = [<span class="keyword">super</span> init]) &#123;</span><br><span class="line">        _students = [<span class="built_in">NSMutableArray</span> array];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 这样是老师写的, 但是它是纯代码做的, 所以控制器有alloc和init 但我使用storyboard, 所以就跳过了这一步, 通过debugging 发现数组是nil, 就说明没有成功alloc和init</span></span><br></pre></td></tr></table></figure>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://magaofei.github.io">mark</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://magaofei.github.io/2016/12/21/29.%20sqlite-for-iOS%E7%8A%AF%E7%9A%84%E9%94%992016%E5%B9%B412%E6%9C%8821%E6%97%A5/">https://magaofei.github.io/2016/12/21/29.%20sqlite-for-iOS%E7%8A%AF%E7%9A%84%E9%94%992016%E5%B9%B412%E6%9C%8821%E6%97%A5/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        
+        <nav class="post-nav"><a class="prev" href="/2017/01/02/30.%20%E4%BD%BF%E7%94%A8TFHpple%E5%A4%84%E7%90%86%E6%95%B0%E6%8D%AE%E7%9A%84%E8%AF%B7%E6%B1%82/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">使用TFHpple处理数据的请求遇到的坑</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    <a class="next" href="/2016/12/20/28.%20%E5%85%B3%E4%BA%8E-iPhone-App-%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%87%A0%E7%82%B9%E7%9C%8B%E6%B3%95%E5%92%8C%E6%80%BB%E7%BB%93/">
+        <span class="next-text nav-default">关于 iPhone App 设计的几点看法和总结</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"><div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:mamian521#email.com" class="iconfont icon-email" title="email"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">mark</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://magaofei.github.io/2016/12/21/29.%20sqlite-for-iOS%E7%8A%AF%E7%9A%84%E9%94%992016%E5%B9%B412%E6%9C%8821%E6%97%A5/';
+        this.page.identifier = '2016/12/21/29. sqlite-for-iOS犯的错2016年12月21日/';
+        this.page.title = 'sqlite for iOS犯的错2016年12月21日';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//wantme.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.6.0"></script>
+</body>
+</html>

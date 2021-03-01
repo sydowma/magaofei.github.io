@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="Python Code Style"/><meta name="keywords" content="python, 马面的部落格" /><link rel="alternate" href="/atom.xml" title="马面的部落格"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.6.0" />
+<link rel="canonical" href="https://magaofei.github.io/2018/03/10/46. Python Code Style/"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.6.0" />
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-86730422-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-86730422-1');
+</script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz",
+      appKey: "1i3I2spUT9rGlts0cWBGKLsv"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz","app_key":"1i3I2spUT9rGlts0cWBGKLsv"},"toc":"","fancybox":"","pjax":"","latex":""};
+</script>
+
+    <title>Python Code Style - 马面的部落格</title>
+  <meta name="generator" content="Hexo 4.2.1"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">马面的部落格</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">首页
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">归档
+          </li>
+      </a><a href="/tags">
+        <li class="mobile-menu-item">标签
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">马面的部落格</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            首页
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            归档
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            标签
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">Python Code Style
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-03-10
+        </span><span class="post-visits"
+             data-url="/2018/03/10/46.%20Python%20Code%20Style/"
+             data-title="Python Code Style">
+          阅读次数 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="Python-Code-Style"><a href="#Python-Code-Style" class="headerlink" title="Python Code Style"></a>Python Code Style</h1><h2 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h2><h4 id="1-遵循-REP-8-标准"><a href="#1-遵循-REP-8-标准" class="headerlink" title="1. 遵循 REP 8 标准"></a>1. 遵循 REP 8 标准</h4><p>使用说明： <a href="http://zh-google-styleguide.readthedocs.io/en/latest/google-python-styleguide/python_style_rules/" target="_blank" rel="noopener">http://zh-google-styleguide.readthedocs.io/en/latest/google-python-styleguide/python_style_rules/</a></p>
+<h4 id="2-print-函数使用"><a href="#2-print-函数使用" class="headerlink" title="2. print 函数使用"></a>2. print 函数使用</h4><p>使用 <code>print(&#39;HelloWorld&#39;)</code> 而不是 <code>print &#39;HelloWorld&#39;</code> </p>
+<p>这样会更有利于理解，print是一个函数</p>
+<h4 id="3-拼接字符串"><a href="#3-拼接字符串" class="headerlink" title="3. 拼接字符串"></a>3. 拼接字符串</h4><p>通常在拼接字符串的时候，你可能会这样写</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">foo = <span class="string">'foo'</span> + <span class="string">'&amp;'</span> + <span class="string">';'</span></span><br></pre></td></tr></table></figure>
+<p>更好的方式其实是</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">foo = <span class="string">'''&#123;&#125;&amp;;'''</span>.format(foo)</span><br></pre></td></tr></table></figure>
+<h4 id="4-Pythonic-写法"><a href="#4-Pythonic-写法" class="headerlink" title="4. Pythonic 写法"></a>4. Pythonic 写法</h4><p>如果你之前学习过 Java C 等语言，那么你可能会写出下面这样的代码：</p>
+<p>求一百里面能被3整除的数</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data = []</span><br><span class="line"><span class="keyword">for</span> item <span class="keyword">in</span> range(<span class="number">100</span>):</span><br><span class="line">    <span class="keyword">if</span> item % <span class="number">3</span> == <span class="number">0</span>:</span><br><span class="line">        data.append(item)</span><br><span class="line">i = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(data)):</span><br><span class="line">    print(i+<span class="number">1</span>, <span class="string">":"</span>, data[i])</span><br></pre></td></tr></table></figure>
+<p>Pythonic 的写法是</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data = [ item <span class="keyword">for</span> item <span class="keyword">in</span> range(<span class="number">100</span>) <span class="keyword">if</span> item % <span class="number">3</span> == <span class="number">0</span> ]</span><br><span class="line"><span class="keyword">for</span> index, item <span class="keyword">in</span> enumerate(data, start=<span class="number">1</span>):</span><br><span class="line">    print(index, <span class="string">":"</span>, item)</span><br></pre></td></tr></table></figure>
+<p>这样的写法成为列表推导，效率要比上面的 for 循环要高</p>
+<p>注意，一般只在创建新列表时使用。<a href="https://www.zhihu.com/question/34637934" target="_blank" rel="noopener">相关说明</a></p>
+<a id="more"></a>
+<h4 id="5-函数要短小"><a href="#5-函数要短小" class="headerlink" title="5. 函数要短小"></a>5. 函数要短小</h4><p>每个函数尽量只做一件事</p>
+<h4 id="6-数字抽离"><a href="#6-数字抽离" class="headerlink" title="6. 数字抽离"></a>6. 数字抽离</h4><p>如果一个字段在数据库中是以数字存储的，比如测试环境代表0，线上环境代表1，在使用时不要直接书写0和1，而要用变量代替，比如</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">CESHI = <span class="number">0</span></span><br><span class="line">ONLINE = <span class="number">1</span></span><br><span class="line">getcookie(ONLINE)</span><br></pre></td></tr></table></figure>
+<h4 id="7-在每个函数下面写注释"><a href="#7-在每个函数下面写注释" class="headerlink" title="7. 在每个函数下面写注释"></a>7. 在每个函数下面写注释</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_sum</span><span class="params">(foo, bar)</span>:</span></span><br><span class="line">  <span class="string">"""</span></span><br><span class="line"><span class="string">  验证相加的结果</span></span><br><span class="line"><span class="string">  :param foo 第一个数值</span></span><br><span class="line"><span class="string">  :param bar 第二个数值</span></span><br><span class="line"><span class="string">  """</span></span><br><span class="line">  <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<h4 id="8-字典取值"><a href="#8-字典取值" class="headerlink" title="8. 字典取值"></a>8. 字典取值</h4><p>平时可能用的更多的是 <code>foo[&#39;bar&#39;]</code> 这种取值和写值，但还有其他方法</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 取值</span></span><br><span class="line">foo.get(<span class="string">'bar'</span>) <span class="comment"># 如果没有 bar 就返回 None</span></span><br><span class="line">foo.get(<span class="string">'bar'</span>, <span class="string">'BAR'</span>) <span class="comment"># 如果没有 bar 会返回默认值 BAR</span></span><br></pre></td></tr></table></figure>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://magaofei.github.io">mark</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://magaofei.github.io/2018/03/10/46.%20Python%20Code%20Style/">https://magaofei.github.io/2018/03/10/46.%20Python%20Code%20Style/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/python/">python</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2018/04/05/47.%20Web%E7%AB%AF%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7%E7%9A%84%E4%B8%80%E7%82%B9%E5%B0%9D%E8%AF%95/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Web端测试工具的一点尝试</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    <a class="next" href="/2018/03/08/45.%20%E4%BD%BF%E7%94%A8%20uwsgi%20%E9%A9%B1%E5%8A%A8%20Django/">
+        <span class="next-text nav-default">使用 uwsgi 驱动 Django 应用</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"><div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:mamian521#email.com" class="iconfont icon-email" title="email"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">mark</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://magaofei.github.io/2018/03/10/46.%20Python%20Code%20Style/';
+        this.page.identifier = '2018/03/10/46. Python Code Style/';
+        this.page.title = 'Python Code Style';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//wantme.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.6.0"></script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="指针变量的写法"/><link rel="alternate" href="/atom.xml" title="马面的部落格"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.6.0" />
+<link rel="canonical" href="https://magaofei.github.io/2016/11/23/17. 指针变量的写法/"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.6.0" />
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-86730422-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-86730422-1');
+</script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz",
+      appKey: "1i3I2spUT9rGlts0cWBGKLsv"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz","app_key":"1i3I2spUT9rGlts0cWBGKLsv"},"toc":"","fancybox":"","pjax":"","latex":""};
+</script>
+
+    <title>指针变量的写法 - 马面的部落格</title>
+  <meta name="generator" content="Hexo 4.2.1"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">马面的部落格</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">首页
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">归档
+          </li>
+      </a><a href="/tags">
+        <li class="mobile-menu-item">标签
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">马面的部落格</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            首页
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            归档
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            标签
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">指针变量的写法
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016-11-23
+        </span><span class="post-visits"
+             data-url="/2016/11/23/17.%20%E6%8C%87%E9%92%88%E5%8F%98%E9%87%8F%E7%9A%84%E5%86%99%E6%B3%95/"
+             data-title="指针变量的写法">
+          阅读次数 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="指针变量的写法"><a href="#指针变量的写法" class="headerlink" title="指针变量的写法"></a>指针变量的写法</h1><p>在刚学习C语言的时候，我对于指针很畏惧，很大程度上是因为它那个恶心的<code>*</code>，后来接触到了以后，发现确实挺恶心的</p>
+<p>关于指针变量的写法不外乎这几种</p>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> *foo;</span><br><span class="line"><span class="keyword">int</span> * foo;</span><br><span class="line"><span class="keyword">int</span>* foo;</span><br></pre></td></tr></table></figure>
+<p>第一种最流行，它写在了变量名前面，能够很清晰的表明这是个指针变量，但我觉得也有问题，为什么？先举个例子</p>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a = <span class="number">0</span>;</span><br><span class="line">foo = &amp;a;</span><br><span class="line">*foo = <span class="number">100</span>;</span><br></pre></td></tr></table></figure>
+<p>注意到了吗？</p>
+<p>在使用指针变量的时候，我们不会把那个<code>*</code>再写出来了，反而，如果你写出来的话，代表的意思就不是指针变量了，而是指针变量所指向变量。</p>
+<p>如果我写了</p>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> *foo;</span><br><span class="line">foo = &amp;a;</span><br></pre></td></tr></table></figure>
+<p>我会感觉到这样的代码，让我有一点歧义，明明上面的foo变量在声明时带上了*表明它是一个指针变量，而下面的带上了就成了另外一种意思，所以我有点讨厌这样的写法。</p>
+<p>第二种写法，很清晰，但也很分散，这样的代码估计很少有人写，另外也有一点歧义，太像乘<code>*</code>了</p>
+<p>第三种写法，直接写在类型的后面，写的人比第二种多一些，我觉得不错，避免了第一种的歧义。</p>
+<p>不管你怎么写，在实际当中肯定还是要遵守团队的规范</p>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://magaofei.github.io">mark</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://magaofei.github.io/2016/11/23/17.%20%E6%8C%87%E9%92%88%E5%8F%98%E9%87%8F%E7%9A%84%E5%86%99%E6%B3%95/">https://magaofei.github.io/2016/11/23/17.%20%E6%8C%87%E9%92%88%E5%8F%98%E9%87%8F%E7%9A%84%E5%86%99%E6%B3%95/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        
+        <nav class="post-nav"><a class="prev" href="/2016/11/24/18.%20%E5%B1%9E%E6%80%A7%E5%A3%B0%E6%98%8E%E7%9A%84%E5%85%B3%E9%94%AE%E5%AD%97/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Objective-C属性声明的关键字</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    <a class="next" href="/2016/11/21/16.%20iOS%E7%95%8C%E9%9D%A2%E5%BC%80%E5%8F%91%EF%BC%88%E5%9F%BA%E7%A1%80%E7%AF%87%EF%BC%89%E4%B8%BB%E8%A7%82%E9%A2%98%E8%80%83%E8%AF%95/">
+        <span class="next-text nav-default">iOS界面开发（基础篇）主观题考试</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"><div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:mamian521#email.com" class="iconfont icon-email" title="email"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">mark</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://magaofei.github.io/2016/11/23/17.%20%E6%8C%87%E9%92%88%E5%8F%98%E9%87%8F%E7%9A%84%E5%86%99%E6%B3%95/';
+        this.page.identifier = '2016/11/23/17. 指针变量的写法/';
+        this.page.title = '指针变量的写法';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//wantme.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.6.0"></script>
+</body>
+</html>

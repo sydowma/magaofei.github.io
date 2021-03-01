@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="Django使用"/><meta name="keywords" content="django, python, 马面的部落格" /><link rel="alternate" href="/atom.xml" title="马面的部落格"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.6.0" />
+<link rel="canonical" href="https://magaofei.github.io/2017/06/07/40. Django使用/"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.6.0" />
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-86730422-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-86730422-1');
+</script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz",
+      appKey: "1i3I2spUT9rGlts0cWBGKLsv"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz","app_key":"1i3I2spUT9rGlts0cWBGKLsv"},"toc":"","fancybox":"","pjax":"","latex":""};
+</script>
+
+    <title>Django使用 - 马面的部落格</title>
+  <meta name="generator" content="Hexo 4.2.1"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">马面的部落格</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">首页
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">归档
+          </li>
+      </a><a href="/tags">
+        <li class="mobile-menu-item">标签
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">马面的部落格</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            首页
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            归档
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            标签
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">Django使用
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-06-07
+        </span><span class="post-visits"
+             data-url="/2017/06/07/40.%20Django%E4%BD%BF%E7%94%A8/"
+             data-title="Django使用">
+          阅读次数 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h2 id="Django使用"><a href="#Django使用" class="headerlink" title="Django使用"></a>Django使用</h2><ol>
+<li>创建</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">django-admin startproject firstsite</span><br><span class="line"><span class="meta">#</span><span class="bash"> 创建名字为firstsite的django站点</span></span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>更改manage.py 文件上面使用的python版本</p>
+</li>
+<li><p>```shell<br>python3 manage.py startapp firstapp<br>#创建app</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">4. 在settings的INSTALLED_APPS中添加刚刚创建的App</span><br><span class="line"></span><br><span class="line">5. 执行</span><br><span class="line"></span><br><span class="line">   &#96;&#96;&#96;shell</span><br><span class="line">   python3 manage.py migrate</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建model</p>
+<figure class="highlight django"><table><tr><td class="code"><pre><span class="line"><span class="xml"># 每个类继承子Model</span></span><br><span class="line"><span class="xml">class People(models.Model):</span></span><br><span class="line"><span class="xml">    # 字符</span></span><br><span class="line"><span class="xml">    # 数据库中暂时没有这个数据没有关系, 名字可以为空, 名字最长200</span></span><br><span class="line"><span class="xml">    name=models.CharField(null=True, blank=True, max_length=200)</span></span><br><span class="line"><span class="xml">    job=models.CharField(null=True, blank=True, max_length=200)</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建策略</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python3 manage.py makemigrations</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>执行migrate</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python3 manage.py migrate</span><br></pre></td></tr></table></figure>
+<p>​</p>
+</li>
+<li><p>在View中找到model中的数据</p>
+<figure class="highlight django"><table><tr><td class="code"><pre><span class="line"><span class="xml">from django.shortcuts import render</span></span><br><span class="line"><span class="xml">"引入"</span></span><br><span class="line"><span class="xml">from firstapp.models import People</span></span><br><span class="line"><span class="xml">from django.template import Context, Template</span></span><br><span class="line"><span class="xml">import HttpResponse</span></span><br><span class="line"></span><br><span class="line"><span class="xml"># Create your views here.</span></span><br><span class="line"><span class="xml">def first_try(request):</span></span><br><span class="line"><span class="xml">    person = People(name='Spock', job='officer')</span></span><br><span class="line"><span class="xml">    html_string = '''</span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">html</span>&gt;</span></span></span><br><span class="line"><span class="xml">          <span class="tag">&lt;<span class="name">head</span>&gt;</span></span></span><br><span class="line"><span class="xml">              <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">href</span>=<span class="string">"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/components/accordion.css"</span>&gt;</span></span></span><br><span class="line"><span class="xml">          <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span></span><br><span class="line"><span class="xml">          <span class="tag">&lt;<span class="name">body</span>&gt;</span></span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;<span class="name">h1</span> <span class="attr">class</span>=<span class="string">"ui center aligned icon header"</span>&gt;</span></span></span><br><span class="line"><span class="xml">              <span class="tag">&lt;<span class="name">i</span> <span class="attr">class</span>=<span class="string">"hand spock icon"</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span></span></span><br><span class="line"><span class="xml">              Hello, </span><span class="template-variable">&#123;&#123; person.name &#125;&#125;</span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line"><span class="xml">          <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;/<span class="name">html</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="xml">    '''</span></span><br><span class="line"><span class="xml">    # 模板</span></span><br><span class="line"><span class="xml">    t = Template(html_string)</span></span><br><span class="line"><span class="xml">    # 上下文</span></span><br><span class="line"><span class="xml">    c = Context</span><span class="template-variable">&#123;&#123;'person': person&#125;&#125;</span></span><br><span class="line"><span class="xml">    # 渲染</span></span><br><span class="line"><span class="xml">    web_page = t.render(c)</span></span><br><span class="line"><span class="xml">    # 编程http的对象</span></span><br><span class="line"><span class="xml">    return HttpResponse(web_page)</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>urls</p>
+<figure class="highlight django"><table><tr><td class="code"><pre><span class="line"><span class="xml">from firstapp.views import first_try</span></span><br><span class="line"></span><br><span class="line"><span class="xml">urlpatterns = [</span></span><br><span class="line"><span class="xml">    url(r'^admin/', admin.site.urls),</span></span><br><span class="line"><span class="xml">    url(r'^first_try/', first_try)</span></span><br><span class="line"><span class="xml">]</span></span><br></pre></td></tr></table></figure>
+<p>​</p>
+</li>
+</ol>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://magaofei.github.io">mark</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://magaofei.github.io/2017/06/07/40.%20Django%E4%BD%BF%E7%94%A8/">https://magaofei.github.io/2017/06/07/40.%20Django%E4%BD%BF%E7%94%A8/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/django/">django</a>
+            <a href="/tags/python/">python</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2017/06/24/41.%20Pywinauto%E4%BD%BF%E7%94%A8%E2%80%94%E2%80%94%E7%AE%80%E5%8D%95%E6%8E%A7%E5%88%B6%E6%97%BA%E6%97%BA%E5%90%A7%E4%B8%8A%E7%BD%91%E7%AE%A1%E7%90%86%E8%BD%AF%E4%BB%B6/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Pywinauto使用——简单控制旺旺吧上网管理软件</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    <a class="next" href="/2017/05/03/39.%20Appium%20Installation%20&%20Setup%20With%20macOS/">
+        <span class="next-text nav-default">macOS 下的Appium安装与配置</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"><div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:mamian521#email.com" class="iconfont icon-email" title="email"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">mark</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://magaofei.github.io/2017/06/07/40.%20Django%E4%BD%BF%E7%94%A8/';
+        this.page.identifier = '2017/06/07/40. Django使用/';
+        this.page.title = 'Django使用';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//wantme.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.6.0"></script>
+</body>
+</html>

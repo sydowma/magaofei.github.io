@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="Linux安装Python3"/><link rel="alternate" href="/atom.xml" title="马面的部落格"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.6.0" />
+<link rel="canonical" href="https://magaofei.github.io/2017/01/18/33. Linux安装Python3/"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.6.0" />
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-86730422-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-86730422-1');
+</script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz",
+      appKey: "1i3I2spUT9rGlts0cWBGKLsv"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz","app_key":"1i3I2spUT9rGlts0cWBGKLsv"},"toc":"","fancybox":"","pjax":"","latex":""};
+</script>
+
+    <title>Linux安装Python3 - 马面的部落格</title>
+  <meta name="generator" content="Hexo 4.2.1"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">马面的部落格</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">首页
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">归档
+          </li>
+      </a><a href="/tags">
+        <li class="mobile-menu-item">标签
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">马面的部落格</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            首页
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            归档
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            标签
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">Linux安装Python3
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-01-18
+        </span><span class="post-visits"
+             data-url="/2017/01/18/33.%20Linux%E5%AE%89%E8%A3%85Python3/"
+             data-title="Linux安装Python3">
+          阅读次数 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><p>Linux安装Python3</p>
+<p>安装依赖库和编译器：</p>
+<p># yum install gcc -y</p>
+<p># yum install openssl-devel</p>
+<p><strong>如果没有安装openssl-devel，在安装过程中pip无法安装</strong></p>
+<p><strong>Step 2</strong>:下载对应版本的Python</p>
+<p># wget <a href="https://www.python.org/ftp/python/3.5.1/Python-3.5.1.tar.xz" target="_blank" rel="noopener">https://www.python.org/ftp/python/3.5.1/Python-3.5.1.tar.xz</a></p>
+<p># xz -d Python-3.5.1.tar.xz </p>
+<p># tar -xvf Python-3.5.1.tar</p>
+<p><strong>Step 3</strong>:编译和安装Python3.5</p>
+<p># cd Python-3.5.1</p>
+<p># ./configure&amp;&amp; make &amp;&amp; make install</p>
+<p>将 python3.5 链接到python3命令</p>
+<p>大部分情况下到step3 后就大功告成了，如果你前面没有安装openssl-devel库，这时你就需要将python3.5链接到python3命令  1. 找到Python3.5安装的目录</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> whereis python</span></span><br></pre></td></tr></table></figure>
+<p>会输出所有Python的目录</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python: /usr/bin/python  /usr/bin/python2.6  /usr/lib/python2.6  /usr/local/bin/python3.5m-config  /usr/local/bin/python3.5-config  /usr/local/bin/python3.5  /usr/local/bin/python3.5m  /usr/local/lib/python3.5  /usr/include/python2.6  /usr/share/man/man1/python.1.gz</span><br></pre></td></tr></table></figure>
+<p>明显安装在了<strong>/usr/local/bin/python3.5</strong> 目录，执行</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> sudo ln -s /usr/<span class="built_in">local</span>/bin/python3.5 /usr/bin/python3</span></span><br></pre></td></tr></table></figure>
+<p>Ubuntu Server 16.04</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ubuntu@VM<span class="number">-82</span><span class="number">-221</span>-ubuntu:/etc$ pip3 install virtualenv</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"/usr/bin/pip3"</span>, line <span class="number">11</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">    sys.exit(main())</span><br><span class="line">  File <span class="string">"/usr/lib/python3/dist-packages/pip/__init__.py"</span>, line <span class="number">215</span>, <span class="keyword">in</span> main</span><br><span class="line">    locale.setlocale(locale.LC_ALL, <span class="string">''</span>)</span><br><span class="line">  File <span class="string">"/usr/lib/python3.5/locale.py"</span>, line <span class="number">594</span>, <span class="keyword">in</span> setlocale</span><br><span class="line">    <span class="keyword">return</span> _setlocale(category, locale)</span><br><span class="line">locale.Error: unsupported locale setting</span><br></pre></td></tr></table></figure>
+<p>解决：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">export LANGUAGE=en_US.UTF<span class="number">-8</span></span><br><span class="line">export LANG=en_US.UTF<span class="number">-8</span></span><br><span class="line">export LC_ALL=en_US.UTF<span class="number">-8</span></span><br><span class="line">locale-gen en_US.UTF<span class="number">-8</span></span><br><span class="line">sudo dpkg-reconfigure locales</span><br></pre></td></tr></table></figure>
+<p>创建虚拟环境</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> pip3 install virtualenv</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">virtualenv --python=`which python3` ~/.virtualenvs/djangodev</span><br><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">source</span> ~/.virtualenvs/djangodev/bin/activate</span></span><br></pre></td></tr></table></figure>
+<p><strong>activate script</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">$ source bin/activate</span><br></pre></td></tr></table></figure>
+<p>安装Django</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> pip3 install Django</span></span><br></pre></td></tr></table></figure>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://magaofei.github.io">mark</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://magaofei.github.io/2017/01/18/33.%20Linux%E5%AE%89%E8%A3%85Python3/">https://magaofei.github.io/2017/01/18/33.%20Linux%E5%AE%89%E8%A3%85Python3/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        
+        <nav class="post-nav"><a class="prev" href="/2017/01/21/34.%20%E9%83%A8%E7%BD%B2Django/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">部署Django</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    <a class="next" href="/2017/01/16/32.%20TableView%E5%92%8CCollectionView%E6%95%B4%E4%BD%93%E4%B8%8A%E7%A7%BB64pt%E9%97%AE%E9%A2%98/">
+        <span class="next-text nav-default">TableView和CollectionView整体上移64pt问题</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"><div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:mamian521#email.com" class="iconfont icon-email" title="email"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">mark</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://magaofei.github.io/2017/01/18/33.%20Linux%E5%AE%89%E8%A3%85Python3/';
+        this.page.identifier = '2017/01/18/33. Linux安装Python3/';
+        this.page.title = 'Linux安装Python3';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//wantme.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.6.0"></script>
+</body>
+</html>

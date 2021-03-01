@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="SonarScanner 源码分析"/><link rel="alternate" href="/atom.xml" title="马面的部落格"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.6.0" />
+<link rel="canonical" href="https://magaofei.github.io/2020/11/24/58.SonarScanner源码分析/"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.6.0" />
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-86730422-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-86730422-1');
+</script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz",
+      appKey: "1i3I2spUT9rGlts0cWBGKLsv"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz","app_key":"1i3I2spUT9rGlts0cWBGKLsv"},"toc":"","fancybox":"","pjax":"","latex":""};
+</script>
+
+    <title>SonarScanner 源码分析 - 马面的部落格</title>
+  <meta name="generator" content="Hexo 4.2.1"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">马面的部落格</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">首页
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">归档
+          </li>
+      </a><a href="/tags">
+        <li class="mobile-menu-item">标签
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">马面的部落格</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            首页
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            归档
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            标签
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">SonarScanner 源码分析
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2020-11-24
+        </span><span class="post-visits"
+             data-url="/2020/11/24/58.SonarScanner%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"
+             data-title="SonarScanner 源码分析">
+          阅读次数 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h2 id="介绍："><a href="#介绍：" class="headerlink" title="介绍："></a>介绍：</h2><p>SonarQube是一个静态代码扫描平台，支持主流语言的静态代码扫描分析。</p>
+<p>SonarQube主要分为几个模块：WebServer、CeServer、Scanner</p>
+<p>今天主要对 Scanner 分析一下源码，其中Scanner是在本地执行扫描分析的工具，也就是说SonarScanner是在本地执行扫描分析之后将结果上传到服务端进行分析。本文重点介绍一下 Scanner 的源码和原理。</p>
+<p>SonarScanner 的源码主要有三部分，一个是 SonarScannerCli 用来执行命令和接收参数(<a href="https://github.com/SonarSource/sonar-scanner-cli.git)，另一个是" target="_blank" rel="noopener">https://github.com/SonarSource/sonar-scanner-cli.git)，另一个是</a> SonarScannerApi ，主要用来下载插件包和加载类 (<a href="https://github.com/SonarSource/sonar-scanner-api.git)，还有真正用来执行扫描的" target="_blank" rel="noopener">https://github.com/SonarSource/sonar-scanner-api.git)，还有真正用来执行扫描的</a> SonarScannerEngine (<a href="https://github.com/SonarSource/sonarqube/tree/master/sonar-scanner-engine" target="_blank" rel="noopener">https://github.com/SonarSource/sonarqube/tree/master/sonar-scanner-engine</a>)</p>
+<p>本文主要分析一下前两部分。</p>
+<h3 id="SonarScannerCli"><a href="#SonarScannerCli" class="headerlink" title="SonarScannerCli"></a>SonarScannerCli</h3><p>目录结构：</p>
+<p><img src="https://tva1.sinaimg.cn/large/0081Kckwly1gl0nmbtmxkj30l00eomya.jpg" alt=""></p>
+<p>可以看出，Cli 的源码并不多，入口是 <code>Main</code> 类的 <code>main</code> 函数</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Logs logs = new Logs(System.out, System.err);</span><br><span class="line">Exit <span class="built_in">exit</span> = new Exit();</span><br><span class="line">Cli cli = new Cli(<span class="built_in">exit</span>, logs).parse(args);</span><br><span class="line">Main main = new Main(<span class="built_in">exit</span>, cli, new Conf(cli, logs, System.getenv()), new ScannerFactory(logs), logs);</span><br><span class="line">main.execute();</span><br></pre></td></tr></table></figure>
+<p>主要的几个类：</p>
+<p>Logs 用来记录日志</p>
+<p>Exit 记录退出码</p>
+<p>Cli 用来解析命令行执行时传递的变量</p>
+<p>Conf 类用来接收 Cli 解析之后的参数</p>
+<p>参数主要从几个地方获取</p>
+<ol>
+<li>Scanner 全局设置(Scanner安装目录/<code>conf/sonar-scanner.properties</code>)</li>
+<li>环境变量 (key = <code>SONARQUBE_SCANNER_PARAMS</code> value 格式为 JSON )</li>
+<li>仓库文件 (<code>sonar-project.properties</code>)</li>
+<li>命令行参数 (通过 Java Properties 传递)</li>
+</ol>
+<p>最后在 Main 里的 <code>execute</code> 方法中执行扫描</p>
+<p>再来看看这个方法</p>
+<h3 id="execute"><a href="#execute" class="headerlink" title="execute"></a>execute</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 记录执行耗时</span></span><br><span class="line">    Stats stats = <span class="keyword">new</span> Stats(logger).start();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 默认退出码为1</span></span><br><span class="line">    <span class="keyword">int</span> status = Exit.INTERNAL_ERROR;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      Properties p = conf.properties();</span><br><span class="line">      <span class="comment">// 检查是否有 skip 跳过扫描的设置</span></span><br><span class="line">      checkSkip(p);</span><br><span class="line">      <span class="comment">// 根据参数设置 log 级别</span></span><br><span class="line">      configureLogging(p);</span><br><span class="line">      <span class="comment">// 初始化 runner</span></span><br><span class="line">      init(p);</span><br><span class="line">      <span class="comment">// 初始化 变量 ，下载插件</span></span><br><span class="line">      runner.start();</span><br><span class="line">      logger.info(String.format(<span class="string">"Analyzing on %s"</span>, conf.isSonarCloud(<span class="keyword">null</span>) ? <span class="string">"SonarCloud"</span> : (<span class="string">"SonarQube server "</span> + runner.serverVersion())));</span><br><span class="line">      <span class="comment">// 执行扫描</span></span><br><span class="line">      execute(stats, p);</span><br><span class="line">      status = Exit.SUCCESS;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">      displayExecutionResult(stats, <span class="string">"FAILURE"</span>);</span><br><span class="line">      showError(<span class="string">"Error during SonarScanner execution"</span>, e, cli.isDebugEnabled());</span><br><span class="line">      status = isUserError(e) ? Exit.USER_ERROR : Exit.INTERNAL_ERROR;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      exit.exit(status);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>里边最重要的是 3 个方法，</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">init(p);</span><br><span class="line">runner.start();</span><br><span class="line">execute(stats, p);</span><br></pre></td></tr></table></figure>
+<h3 id="init"><a href="#init" class="headerlink" title="init"></a>init</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(Properties p)</span> </span>&#123;</span><br><span class="line">    SystemInfo.print(logger);</span><br><span class="line">    <span class="keyword">if</span> (cli.isDisplayVersionOnly()) &#123;</span><br><span class="line">      exit.exit(Exit.SUCCESS);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    runner = runnerFactory.create(p, cli.getInvokedFrom());</span><br><span class="line">  &#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ScannerFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Logs logger;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">ScannerFactory</span><span class="params">(Logs logger)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.logger = logger;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function">EmbeddedScanner <span class="title">create</span><span class="params">(Properties props, String isInvokedFrom)</span> </span>&#123;</span><br><span class="line">    String appName = <span class="string">"ScannerCLI"</span>;</span><br><span class="line">    String appVersion = ScannerVersion.version();</span><br><span class="line">    <span class="keyword">if</span> (!isInvokedFrom.equals(<span class="string">""</span>) &amp;&amp; isInvokedFrom.contains(<span class="string">"/"</span>)) &#123;</span><br><span class="line">      appName = isInvokedFrom.split(<span class="string">"/"</span>)[<span class="number">0</span>];</span><br><span class="line">      appVersion = isInvokedFrom.split(<span class="string">"/"</span>)[<span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> EmbeddedScanner.create(appName, appVersion, <span class="keyword">new</span> DefaultLogOutput())</span><br><span class="line">      .addGlobalProperties((Map) props);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p><code>EmbeddedScanner runner</code> 是真正的执行的扫描的类，创建该类的实例化时，提供了一个 <code>create</code> 方法，实现了工厂设计模式。</p>
+<p>到 <code>ScannerFactory</code> 就进入到了 ScannerApi 这个库里</p>
+<p>可以看到，更多的细节处理在 SonarScannerApi 中，SonarScannerCli 这个库主要是进行了命令的解析及处理，后续的工作由 SonarScannerApi 来完成。</p>
+<h3 id="SonarScannerApi"><a href="#SonarScannerApi" class="headerlink" title="SonarScannerApi"></a>SonarScannerApi</h3><p>目录结构：</p>
+<p><img src="https://tva1.sinaimg.cn/large/0081Kckwly1gl0nnrbz3oj30ps11otd7.jpg" alt=""></p>
+<p>我们先看一下 <code>EmbeddedScanner</code> 这个入口类</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Entry point to run SonarQube analysis programmatically.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2.2</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EmbeddedScanner</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String BITBUCKET_CLOUD_ENV_VAR = <span class="string">"BITBUCKET_BUILD_NUMBER"</span>;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String SONAR_HOST_URL_ENV_VAR = <span class="string">"SONAR_HOST_URL"</span>;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String SONARCLOUD_HOST = <span class="string">"&lt;https://sonarcloud.io&gt;"</span>;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> IsolatedLauncherFactory launcherFactory;</span><br><span class="line">  <span class="keyword">private</span> IsolatedLauncher launcher;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> LogOutput logOutput;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, String&gt; globalProperties = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Logger logger;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Set&lt;String&gt; classloaderMask = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Set&lt;String&gt; classloaderUnmask = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> System2 system;</span><br><span class="line"></span><br><span class="line">  EmbeddedScanner(IsolatedLauncherFactory bl, Logger logger, LogOutput logOutput, System2 system) &#123;</span><br><span class="line">    <span class="keyword">this</span>.logger = logger;</span><br><span class="line">    <span class="keyword">this</span>.launcherFactory = bl;</span><br><span class="line">    <span class="keyword">this</span>.logOutput = logOutput;</span><br><span class="line">    <span class="keyword">this</span>.classloaderUnmask.add(<span class="string">"org.sonarsource.scanner.api.internal.batch."</span>);</span><br><span class="line">    <span class="keyword">this</span>.system = system;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> EmbeddedScanner <span class="title">create</span><span class="params">(String app, String version, <span class="keyword">final</span> LogOutput logOutput, System2 system2)</span> </span>&#123;</span><br><span class="line">    Logger logger = <span class="keyword">new</span> LoggerAdapter(logOutput);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> EmbeddedScanner(<span class="keyword">new</span> IsolatedLauncherFactory(logger), logger, logOutput, system2)</span><br><span class="line">      .setGlobalProperty(InternalProperties.SCANNER_APP, app)</span><br><span class="line">      .setGlobalProperty(InternalProperties.SCANNER_APP_VERSION, version);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> EmbeddedScanner <span class="title">create</span><span class="params">(String app, String version, <span class="keyword">final</span> LogOutput logOutput)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> create(app, version, logOutput, <span class="keyword">new</span> System2());</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p><code>create</code> 用来初始化和实例化 <code>EmbeddedScanner</code> 对象，主要有这几参数：</p>
+<p>IsolatedLauncherFactory  (启动器工厂类)</p>
+<p>Logger (日志接口)</p>
+<p>LogOutput (日志输出接口)</p>
+<p>System2 (和 System 类相同，额外包了一层)</p>
+<p>里边重要的是 <code>IsolatedLauncherFactory</code> ，又是一个 工厂类，初始化了 IsolatedLauncherFactory 的属性，调用了构造方法。</p>
+<p>综上，<code>init</code> 方法进行的操作主要是对几个关键类的实例化操作。</p>
+<h3 id="runner-start"><a href="#runner-start" class="headerlink" title="runner.start()"></a>runner.start()</h3><p>我们再回到 <code>EmbeddedScanner.start</code> 方法里</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Download scanner-engine JAR and start bootstrapping classloader. After that it is possible to call &#123;<span class="doctag">@link</span> #serverVersion()&#125;</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 设置全局变量</span></span><br><span class="line">    initGlobalDefaultValues();</span><br><span class="line">    doStart();</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>设置全局参数</li>
+<li>调用 runner 的 <code>doStart</code> 方法</li>
+</ol>
+<p>通过注释我们可以了解到，其功能是下载扫描器的引擎jar包，并利用类加载器加载。看一下 <code>doStart</code> 方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doStart</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 检查 IsolatedLauncher 有没有实例化，如果已经实例化，说明已经启动，抛出异常</span></span><br><span class="line">    checkLauncherDoesntExist();</span><br><span class="line">    <span class="comment">// 创建 load class 的规则</span></span><br><span class="line">    ClassloadRules rules = <span class="keyword">new</span> ClassloadRules(classloaderMask, classloaderUnmask);</span><br><span class="line">    <span class="comment">// 初始化</span></span><br><span class="line">    launcher = launcherFactory.createLauncher(globalProperties(), rules);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>我们重点看下最后一行</p>
+<p>利用了 launcher 的工厂类来创建 <code>IsolatedClassloader</code> 对象</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> IsolatedLauncher <span class="title">createLauncher</span><span class="params">(Map&lt;String, String&gt; props, ClassloadRules rules)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (props.containsKey(InternalProperties.SCANNER_DUMP_TO_FILE)) &#123;</span><br><span class="line">      String version = props.get(InternalProperties.SCANNER_VERSION_SIMULATION);</span><br><span class="line">      <span class="keyword">if</span> (version == <span class="keyword">null</span>) &#123;</span><br><span class="line">        version = <span class="string">"5.6"</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> SimulatedLauncher(version, logger);</span><br><span class="line">    &#125;</span><br><span class="line">    ServerConnection serverConnection = ServerConnection.create(props, logger);</span><br><span class="line">    JarDownloader jarDownloader = <span class="keyword">new</span> JarDownloaderFactory(serverConnection, logger, props.get(<span class="string">"sonar.userHome"</span>)).create();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> createLauncher(jarDownloader, rules);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>首先判断是否传递了 <code>sonar.scanner.dumpToFile</code> 参数，如果传递后续不再执行扫描，而是把参数全部写入到指定的文件里，推测这个作用是为了调试，所以取名<code>Simulated</code> 模拟的含义。</p>
+<p>接着和服务端也就是 SonarQube 的服务进行连接。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ServerConnection <span class="title">create</span><span class="params">(Map&lt;String, String&gt; props, Logger logger)</span> </span>&#123;</span><br><span class="line">  String serverUrl = props.get(<span class="string">"sonar.host.url"</span>);</span><br><span class="line">  String userAgent = format(<span class="string">"%s/%s"</span>, props.get(SCANNER_APP), props.get(SCANNER_APP_VERSION));</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> ServerConnection(serverUrl, userAgent, logger);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以看到，使用<code>OkHttp</code> 这个库来进行接口请求。</p>
+<p>紧接着是 <code>JarDownloaderFactory</code> 工厂类的 <code>create</code> 方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function">JarDownloader <span class="title">create</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    FileCache fileCache = <span class="keyword">new</span> FileCacheBuilder(logger)</span><br><span class="line">      .setUserHome(userHome)</span><br><span class="line">      .build();</span><br><span class="line"></span><br><span class="line">    BootstrapIndexDownloader bootstrapIndexDownloader = <span class="keyword">new</span> BootstrapIndexDownloader(serverConnection, logger);</span><br><span class="line">    ScannerFileDownloader scannerFileDownloader = <span class="keyword">new</span> ScannerFileDownloader(serverConnection);</span><br><span class="line">    JarExtractor jarExtractor = <span class="keyword">new</span> JarExtractor();</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> JarDownloader(scannerFileDownloader, bootstrapIndexDownloader, fileCache, jarExtractor, logger);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>这些方法依旧是为了实例化对象。</p>
+<p>接着在 <code>IsolatedLauncherFactory</code> 中调用 <code>IsolatedLauncher createLauncher(final JarDownloader jarDownloader, final ClassloadRules rules)</code> 方法。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function">IsolatedLauncher <span class="title">createLauncher</span><span class="params">(<span class="keyword">final</span> JarDownloader jarDownloader, <span class="keyword">final</span> ClassloadRules rules)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> AccessController.doPrivileged((PrivilegedAction&lt;IsolatedLauncher&gt;) () -&gt; &#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 下载 插件 jar 包</span></span><br><span class="line">        List&lt;File&gt; jarFiles = jarDownloader.download();</span><br><span class="line">        logger.debug(<span class="string">"Create isolated classloader..."</span>);</span><br><span class="line">        <span class="comment">// 创建自定义类加载器</span></span><br><span class="line">        cl = createClassLoader(jarFiles, rules);</span><br><span class="line">        <span class="comment">// 创建代理类</span></span><br><span class="line">        IsolatedLauncher objProxy = IsolatedLauncherProxy.create(cl, IsolatedLauncher<span class="class">.<span class="keyword">class</span>, <span class="title">launcherImplClassName</span>, <span class="title">logger</span>)</span>;</span><br><span class="line">        tempCleaning.clean();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> objProxy;</span><br><span class="line">      &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        <span class="comment">// Catch all other exceptions, which relates to reflection</span></span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> ScannerException(<span class="string">"Unable to execute SonarScanner analysis"</span>, e);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>IsolatedLauncherProxy</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">IsolatedLauncherProxy</span> <span class="keyword">implements</span> <span class="title">InvocationHandler</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Object proxied;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> ClassLoader cl;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Logger logger;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="title">IsolatedLauncherProxy</span><span class="params">(ClassLoader cl, Object proxied, Logger logger)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.cl = cl;</span><br><span class="line">    <span class="keyword">this</span>.proxied = proxied;</span><br><span class="line">    <span class="keyword">this</span>.logger = logger;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">T <span class="title">create</span><span class="params">(ClassLoader cl, Class&lt;T&gt; interfaceClass, String proxiedClassName, Logger logger)</span> <span class="keyword">throws</span> ReflectiveOperationException </span>&#123;</span><br><span class="line">    Object proxied = createProxiedObject(cl, proxiedClassName);</span><br><span class="line">    <span class="comment">// interfaceClass needs to be loaded with a parent ClassLoader (common to both ClassLoaders)</span></span><br><span class="line">    <span class="comment">// In addition, Proxy.newProxyInstance checks if the target ClassLoader sees the same class as the one given</span></span><br><span class="line">    Class&lt;?&gt; loadedInterfaceClass = cl.loadClass(interfaceClass.getName());</span><br><span class="line">    <span class="keyword">return</span> (T) create(cl, proxied, loadedInterfaceClass, logger);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">T <span class="title">create</span><span class="params">(ClassLoader cl, Object proxied, Class&lt;T&gt; interfaceClass, Logger logger)</span> </span>&#123;</span><br><span class="line">    Class&lt;?&gt;[] c = &#123;interfaceClass&#125;;</span><br><span class="line">    <span class="keyword">return</span> (T) Proxy.newProxyInstance(cl, c, <span class="keyword">new</span> IsolatedLauncherProxy(cl, proxied, logger));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">    ClassLoader initialContextClassLoader = Thread.currentThread().getContextClassLoader();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="comment">// 设置类加载器</span></span><br><span class="line">      Thread.currentThread().setContextClassLoader(cl);</span><br><span class="line">      logger.debug(<span class="string">"Execution "</span> + method.getName());</span><br><span class="line">      <span class="keyword">return</span> method.invoke(proxied, args);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (UndeclaredThrowableException | InvocationTargetException e) &#123;</span><br><span class="line">      <span class="keyword">throw</span> unwrapException(e);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      <span class="comment">// 还原类加载器</span></span><br><span class="line">      Thread.currentThread().setContextClassLoader(initialContextClassLoader);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> Throwable <span class="title">unwrapException</span><span class="params">(Throwable e)</span> </span>&#123;</span><br><span class="line">    Throwable cause = e;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (cause.getCause() != <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (cause <span class="keyword">instanceof</span> UndeclaredThrowableException || cause <span class="keyword">instanceof</span> InvocationTargetException) &#123;</span><br><span class="line">        cause = cause.getCause();</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> cause;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> Object <span class="title">createProxiedObject</span><span class="params">(ClassLoader cl, String proxiedClassName)</span> <span class="keyword">throws</span> ClassNotFoundException, InstantiationException, IllegalAccessException </span>&#123;</span><br><span class="line">    Class&lt;?&gt; proxiedClass = cl.loadClass(proxiedClassName);</span><br><span class="line">    <span class="keyword">return</span> proxiedClass.newInstance();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>IsolatedLauncherProxy</code> 是用了JDK的动态代理，通过传入的 ClassLoader ，接口，被代理类的名称 <code>org.sonarsource.scanner.api.internal.batch.BatchIsolatedLauncher</code> ，最后生成 <code>BatchIsolatedLauncher</code> 的实例，然后 <code>BatchIsolatedLauncher</code> 调用了 SonarScannerEngine 的 <code>Batch</code> 类，完成扫描。</p>
+<p><code>JarDownloader</code>主要是去下载 Jar 包，下载之前优先去本地检查 jar 包的缓存。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function">List&lt;File&gt; <span class="title">download</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    List&lt;File&gt; files = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    logger.debug(<span class="string">"Extract sonar-scanner-api-batch in temp..."</span>);</span><br><span class="line">    files.add(jarExtractor.extractToTemp(<span class="string">"sonar-scanner-api-batch"</span>).toFile());</span><br><span class="line">    files.addAll(getScannerEngineFiles());</span><br><span class="line">    <span class="keyword">return</span> files;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> List&lt;File&gt; <span class="title">getScannerEngineFiles</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Collection&lt;JarEntry&gt; index = bootstrapIndexDownloader.getIndex();</span><br><span class="line">    <span class="keyword">return</span> index.stream()</span><br><span class="line">      .map(jar -&gt; fileCache.get(jar.getFilename(), jar.getHash(), scannerFileDownloader))</span><br><span class="line">      .collect(Collectors.toList());</span><br><span class="line">  &#125;</span><br><span class="line"><span class="function">Collection&lt;JarEntry&gt; <span class="title">getIndex</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    String index;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      logger.debug(<span class="string">"Get bootstrap index..."</span>);</span><br><span class="line">      <span class="comment">// 从链接获取文件名和hash</span></span><br><span class="line">      index = conn.downloadString(<span class="string">"/batch/index"</span>);</span><br><span class="line">      logger.debug(<span class="string">"Get bootstrap completed"</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Fail to get bootstrap index from server"</span>, e);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> parse(index);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 解析</span></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> Collection&lt;JarEntry&gt; <span class="title">parse</span><span class="params">(String index)</span> </span>&#123;</span><br><span class="line">    Collection&lt;JarEntry&gt; entries = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    String[] lines = index.split(<span class="string">"[\\r\\n]+"</span>);</span><br><span class="line">    <span class="keyword">for</span> (String line : lines) &#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        line = line.trim();</span><br><span class="line">        String[] libAndHash = line.split(<span class="string">"\\\\|"</span>);</span><br><span class="line">        String filename = libAndHash[<span class="number">0</span>];</span><br><span class="line">        String hash = libAndHash[<span class="number">1</span>];</span><br><span class="line">        entries.add(<span class="keyword">new</span> JarEntry(filename, hash));</span><br><span class="line">      &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Fail to parse entry in bootstrap index: "</span> + line);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> entries;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">JarEntry</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String filename;</span><br><span class="line">    <span class="keyword">private</span> String hash;</span><br><span class="line"></span><br><span class="line">    JarEntry(String filename, String hash) &#123;</span><br><span class="line">      <span class="keyword">this</span>.filename = filename;</span><br><span class="line">      <span class="keyword">this</span>.hash = hash;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getFilename</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> filename;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getHash</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> hash;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>在 BootstrapIndexDownloader 类中，先去获取最新的插件版本 <code>getIndex()</code>，地址为 <code>[/batch/index](&lt;http://sonarqubeurl//batch/index&gt;)</code> ，以我的 SonarQube 为例，返回的是 <code>sonar-scanner-engine-shaded-7.9.4-all.jar|6daf938ede67767970bafc194078293b</code> 接着调用 <code>parse()</code> 方法进行解析，前者是文件名，后者是 hash 数值，一般应该为 md5 。</p>
+<p>如果本地之前没有下载过，则跳转到 <code>/batch/file?name=${filename}</code> 地址去下载。</p>
+<p>解压 jar 包的内容，如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">META-INF              com                   freemarker            linux                 okhttp3               org                   sq-version.txt</span><br><span class="line">ch                    darwin                google                net                   okio                  sonar-api-version.txt win32</span><br></pre></td></tr></table></figure>
+<p>Jar包文件的内容主要有两部分，一部分是 .class 文件，是用来执行扫描和跟服务器进行数据传输的，一部分是  proto 文件，说明scanner和服务端通信是用了 <code>protobuffer</code> 协议。</p>
+<p>接着使用到了Java的类加载器机制，将刚刚下载到的 Jar 包装到类加载器中去加载，自定义了一个类加载器 <code>IsolatedClassloader</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Special &#123;<span class="doctag">@link</span> java.net.URLClassLoader&#125; to execute batch, which restricts loading from parent.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">IsolatedClassloader</span> <span class="keyword">extends</span> <span class="title">URLClassLoader</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> ClassloadRules rules;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * The parent classloader is used only for loading classes and resources in unmasked packages</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  IsolatedClassloader(ClassLoader parent, ClassloadRules rules) &#123;</span><br><span class="line">    <span class="keyword">super</span>(<span class="keyword">new</span> URL[<span class="number">0</span>], parent);</span><br><span class="line">    <span class="keyword">this</span>.rules = rules;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">addFiles</span><span class="params">(List&lt;File&gt; files)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="keyword">for</span> (File file : files) &#123;</span><br><span class="line">        addURL(file.toURI().toURL());</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (MalformedURLException e) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Fail to create classloader"</span>, e);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Same behavior as in &#123;<span class="doctag">@link</span> java.net.URLClassLoader#loadClass(String, boolean)&#125;, except loading from parent.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="keyword">protected</span> <span class="keyword">synchronized</span> Class&lt;?&gt; loadClass(String name, <span class="keyword">boolean</span> resolve) <span class="keyword">throws</span> ClassNotFoundException &#123;</span><br><span class="line">    <span class="comment">// First, check if the class has already been loaded</span></span><br><span class="line">    Class&lt;?&gt; c = findLoadedClass(name);</span><br><span class="line">    <span class="keyword">if</span> (c == <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// Load from parent</span></span><br><span class="line">        <span class="keyword">if</span> (getParent() != <span class="keyword">null</span> &amp;&amp; rules.canLoad(name)) &#123;</span><br><span class="line">          c = getParent().loadClass(name);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line"></span><br><span class="line">          <span class="comment">// Load from system</span></span><br><span class="line"></span><br><span class="line">          <span class="comment">// I don't know for other vendors, but for Oracle JVM :</span></span><br><span class="line">          <span class="comment">// - ClassLoader.getSystemClassLoader() is sun.misc.Launcher$AppClassLoader. It contains app classpath.</span></span><br><span class="line">          <span class="comment">// - ClassLoader.getSystemClassLoader().getParent() is sun.misc.Launcher$ExtClassLoader. It contains core JVM</span></span><br><span class="line">          ClassLoader systemClassLoader = getSystemClassLoader();</span><br><span class="line">          <span class="keyword">if</span> (systemClassLoader.getParent() != <span class="keyword">null</span>) &#123;</span><br><span class="line">            systemClassLoader = systemClassLoader.getParent();</span><br><span class="line">          &#125;</span><br><span class="line">          c = systemClassLoader.loadClass(name);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</span><br><span class="line">        <span class="comment">// If still not found, then invoke findClass in order</span></span><br><span class="line">        <span class="comment">// to find the class.</span></span><br><span class="line">        c = findClass(name);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (resolve) &#123;</span><br><span class="line">      resolveClass(c);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> c;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>看一下 <code>IsolatedClassloader</code> 发现它继承了<code>URLClassLoader</code></p>
+<p>在常规加载器的内容上，判断了该类是否允许被加载<code>rules.canLoad</code>，不过查看源码，并没有地方被调用。</p>
+<p>接着使用 JDK 动态代理技术，创建 <code>org.sonarsource.scanner.api.internal.batch.BatchIsolatedLauncher</code> 的代理类并返回，到这里，start 方法的流程结束了</p>
+<h3 id="execute-1"><a href="#execute-1" class="headerlink" title="execute()"></a>execute()</h3><p>最后回到 Main 类的 execute方法，调用了 <code>EmbeddedScanner</code> 的 <code>execute</code> 方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doExecute</span><span class="params">(Map&lt;String, String&gt; properties)</span> </span>&#123;</span><br><span class="line">    launcher.execute(properties, (formattedMessage, level) -&gt; logOutput.log(formattedMessage, LogOutput.Level.valueOf(level.name())));</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>这里边只做了一件事就是调用 <code>IsolatedLauncher</code> 的 <code>execute</code> 方法，通过查看源码可以知道这是个接口.</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IsolatedLauncher</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">execute</span><span class="params">(Map&lt;String, String&gt; var1, LogOutput var2)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">String <span class="title">getVersion</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>并且，该源码内继承该接口的类只有一个，就是刚刚的 模拟类 <code>SimulatedLauncher</code> ，通过刚刚的源码可以知道这个类只是用来测试或者模拟用的，并不是真正的执行类，那真正的执行代码在哪？</p>
+<p>查看代码之后发现在 <code>org/sonarsource/scanner/api/internal/batch/BatchIsolatedLauncher.java</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">(Map&lt;String, String&gt; properties, org.sonarsource.scanner.api.internal.batch.LogOutput logOutput)</span> </span>&#123;</span><br><span class="line">    factory.createBatch(properties, logOutput).execute();</span><br><span class="line">  &#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DefaultBatchFactory</span> <span class="keyword">implements</span> <span class="title">BatchFactory</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String SCANNER_APP_KEY = <span class="string">"sonar.scanner.app"</span>;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String SCANNER_APP_VERSION_KEY = <span class="string">"sonar.scanner.appVersion"</span>;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Batch <span class="title">createBatch</span><span class="params">(Map&lt;String, String&gt; properties, <span class="keyword">final</span> org.sonarsource.scanner.api.internal.batch.LogOutput logOutput)</span> </span>&#123;</span><br><span class="line">    EnvironmentInformation env = <span class="keyword">new</span> EnvironmentInformation(properties.get(SCANNER_APP_KEY), properties.get(SCANNER_APP_VERSION_KEY));</span><br><span class="line">    <span class="keyword">return</span> Batch.builder()</span><br><span class="line">      .setEnvironment(env)</span><br><span class="line">      .setGlobalProperties(properties)</span><br><span class="line">      .setLogOutput((formattedMessage, level) -&gt; logOutput.log(formattedMessage, LogOutput.Level.valueOf(level.name())))</span><br><span class="line">      .build();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>BatchIsolatedLauncher</code> 的 <code>execute</code> 方法内，先用工厂类创建了一个 <code>Batch</code> 对象，设置参数等信息，然后执行 Batch 的 execute 方法。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> Batch <span class="title">execute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    configureLogging();</span><br><span class="line">    doStart();</span><br><span class="line">    <span class="keyword">boolean</span> threw = <span class="keyword">true</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      doExecuteTask(globalProperties);</span><br><span class="line">      threw = <span class="keyword">false</span>;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      doStop(threw);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>到这里就开始真正的代码扫描的任务执行了，会进入到下一个模块，<code>sonar-scanner-engine</code></p>
+<p>该代码位于 <code>SonarQube</code> 源码仓库下边的 <code>sonar-scanner-engine</code> 模块。</p>
+<p><a href="https://github.com/SonarSource/sonarqube/tree/master/sonar-scanner-engine" target="_blank" rel="noopener">https://github.com/SonarSource/sonarqube/tree/master/sonar-scanner-engine</a></p>
+<p>后续再单独针对这块代码的分析。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>SonarScanner 设计的很巧妙，安装 SonarScanner 只需要一个jar 包，大小500KB左右，分析代码需要的插件代码会自动从 SonarQube 的服务器下载，使用自定义的ClassLoader来加载从服务器上下载的jar包，然后使用这个启动器类调用了 SonarScannerEngine 的 Batch 启动并执行代码扫描。这种方式对于客户端(Scanner)来说不需要维护和更新插件，插件的更新在服务端就可以完成，减少了分发更新的成本。</p>
+<p>参考：</p>
+<p><a href="https://www.jianshu.com/p/c22213591f47" target="_blank" rel="noopener">sonarqube+sonar-scanner-engine扫描引擎主要执行步骤</a></p>
+<p><a href="https://blog.csdn.net/lxlmycsdnfree/article/details/80283697" target="_blank" rel="noopener">Sonar 质量扫描的输出日志–对应源码的跟踪（一）{源码解析sonar-scanner-maven3.2}</a></p>
+<p><a href="https://www.cnblogs.com/jiaoyiping/p/9691620.html" target="_blank" rel="noopener">sonar-scanner的执行流程和对ClassLoader,动态代理的使用 - 梦中彩虹 - 博客园</a></p>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://magaofei.github.io">mark</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://magaofei.github.io/2020/11/24/58.SonarScanner%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">https://magaofei.github.io/2020/11/24/58.SonarScanner%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        
+        <nav class="post-nav"><a class="prev" href="/2020/11/24/59.%20%E5%88%A9%E7%94%A8%20GitHub%20Action%20%E5%8F%91%E5%B8%83%20Hexo%20%E5%8D%9A%E5%AE%A2/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">利用 GitHub Action 发布 Hexo 博客 GitHub Pages</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    <a class="next" href="/2019/07/04/57.%20concurrent/">
+        <span class="next-text nav-default">java 并发</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"><div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:mamian521#email.com" class="iconfont icon-email" title="email"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">mark</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://magaofei.github.io/2020/11/24/58.SonarScanner%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/';
+        this.page.identifier = '2020/11/24/58.SonarScanner源码分析/';
+        this.page.title = 'SonarScanner 源码分析';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//wantme.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.6.0"></script>
+</body>
+</html>

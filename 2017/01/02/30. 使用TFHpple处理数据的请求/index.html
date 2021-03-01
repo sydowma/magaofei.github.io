@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="使用TFHpple处理数据的请求遇到的坑"/><meta name="keywords" content="iOS, 马面的部落格" /><link rel="alternate" href="/atom.xml" title="马面的部落格"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.6.0" />
+<link rel="canonical" href="https://magaofei.github.io/2017/01/02/30. 使用TFHpple处理数据的请求/"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.6.0" />
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-86730422-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-86730422-1');
+</script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz",
+      appKey: "1i3I2spUT9rGlts0cWBGKLsv"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz","app_key":"1i3I2spUT9rGlts0cWBGKLsv"},"toc":"","fancybox":"","pjax":"","latex":""};
+</script>
+
+    <title>使用TFHpple处理数据的请求遇到的坑 - 马面的部落格</title>
+  <meta name="generator" content="Hexo 4.2.1"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">马面的部落格</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">首页
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">归档
+          </li>
+      </a><a href="/tags">
+        <li class="mobile-menu-item">标签
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">马面的部落格</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            首页
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            归档
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            标签
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">使用TFHpple处理数据的请求遇到的坑
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-01-02
+        </span><span class="post-visits"
+             data-url="/2017/01/02/30.%20%E4%BD%BF%E7%94%A8TFHpple%E5%A4%84%E7%90%86%E6%95%B0%E6%8D%AE%E7%9A%84%E8%AF%B7%E6%B1%82/"
+             data-title="使用TFHpple处理数据的请求遇到的坑">
+          阅读次数 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="使用TFHpple处理数据的请求遇到的坑"><a href="#使用TFHpple处理数据的请求遇到的坑" class="headerlink" title="使用TFHpple处理数据的请求遇到的坑"></a>使用TFHpple处理数据的请求遇到的坑</h1><p>由于App中需要抓取网页数据，也没有做后台，就在iOS App里手动检索HTML信息进行抓取，这个过程中使用到了TFHpple框架，不过我看了一些范例都是直接使用NSData来直接获取网页的Data，这样做肯定会阻塞主线程，我一直在尝试使用其他方法，但都没有成功，困扰了我很久，直到昨天看到一篇网易公开课的文章提到了（<a href="http://www.itgo.me/a/2968793659999962488/TFHpple-XPath）。" target="_blank" rel="noopener">http://www.itgo.me/a/2968793659999962488/TFHpple-XPath）。</a></p>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)wangyi &#123;</span><br><span class="line"><span class="comment">// 网易公开课地址</span></span><br><span class="line"><span class="built_in">NSString</span> *str=[<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"http://open.163.com/"</span>];</span><br><span class="line"><span class="built_in">NSURL</span> *url = [<span class="built_in">NSURL</span> URLWithString:[str stringByAddingPercentEscapesUsingEncoding:<span class="built_in">NSUTF8StringEncoding</span>]];</span><br><span class="line"><span class="comment">// UTF－8</span></span><br><span class="line"><span class="built_in">NSURLRequest</span> *request = [<span class="built_in">NSURLRequest</span> requestWithURL:url];</span><br><span class="line">AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]initWithRequest:request];</span><br><span class="line"><span class="comment">// 请求数据，设置成功与失败的回调函数</span></span><br><span class="line">[operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, <span class="keyword">id</span> responseObject) &#123;</span><br><span class="line"><span class="comment">// 请求下来的整个网页数据</span></span><br><span class="line"><span class="built_in">NSString</span> *html = operation.responseString;</span><br><span class="line"><span class="comment">// 网页有gbk编码有utf8编码，全部换成utf8</span></span><br><span class="line"><span class="built_in">NSString</span> *utf8HtmlStr = [html stringByReplacingOccurrencesOfString:<span class="string">@"&lt;meta http-equiv=\"Content-Type\" content=\"text/html; charset=GBK\"&gt;"</span> withString:<span class="string">@"&lt;meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"&gt;"</span>];</span><br><span class="line"><span class="comment">// TFHpple解析的是data，转换成data</span></span><br><span class="line"><span class="built_in">NSData</span> *htmlDataUTF8 = [utf8HtmlStr dataUsingEncoding:<span class="built_in">NSUTF8StringEncoding</span>];</span><br><span class="line"><span class="comment">// 开始解析</span></span><br><span class="line">TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlDataUTF8];</span><br><span class="line"><span class="comment">// 查找所有的 &lt;div class="g-cell1"</span></span><br><span class="line"><span class="comment">// 因为首页的“小编推荐”是使用该class标示的，所以主要获取的是该种形式的小课程节目</span></span><br><span class="line"><span class="built_in">NSArray</span> *elements</span><br><span class="line">= [xpathParser searchWithXPathQuery:<span class="string">@"//div[@class='g-cell1']"</span>];</span><br><span class="line"><span class="comment">// 不存在则不继续执行</span></span><br><span class="line"><span class="keyword">if</span> ([elements count] &lt;= <span class="number">0</span>) &#123;</span><br><span class="line"><span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 以下只是示例解析第一个课程，循环即可全部解析</span></span><br><span class="line">TFHppleElement *first = [elements firstObject];</span><br><span class="line"><span class="comment">// 完整写法</span></span><br><span class="line"><span class="built_in">NSArray</span> *arr = [first searchWithXPathQuery:<span class="string">@"//a[1]/@href"</span>];</span><br><span class="line">TFHppleElement *ele = [arr firstObject];</span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"网址链接：%@"</span>,[ele text]);</span><br><span class="line"><span class="comment">// 合并的写法</span></span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"图片链接：%@"</span>,[[[first searchWithXPathQuery:<span class="string">@"//img/@src"</span>] firstObject] text]);</span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"标题：%@"</span>,[[[first searchWithXPathQuery:<span class="string">@"//h5"</span>] firstObject] text]);</span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"副标题：%@"</span>,[[[first searchWithXPathQuery:<span class="string">@"//p"</span>] firstObject] text]);</span><br><span class="line">&#125;failure:^(AFHTTPRequestOperation *operation, <span class="built_in">NSError</span> *error) &#123;</span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"发生错误！%@"</span>,error);</span><br><span class="line">&#125;];</span><br><span class="line"><span class="comment">// 加入队列 开始执行</span></span><br><span class="line"><span class="built_in">NSOperationQueue</span> *queue = [[<span class="built_in">NSOperationQueue</span> alloc] init];</span><br><span class="line">[queue addOperation:operation];&#125;</span><br></pre></td></tr></table></figure>
+<p>这个代码使用的是AFNetworking 2x的版本，不过网页已经更改了，所以这个解析已经失效了。</p>
+<p>我把代码使用了之后，可以使用</p>
+<p>接着我尝试把TFHpple处理HTML的这部份放到子线程去执行，参考代码<a href="http://www.jianshu.com/p/943dcb9ad632" target="_blank" rel="noopener">http://www.jianshu.com/p/943dcb9ad632</a></p>
+<p>然后分别计算时间对比一下这三种方式。</p>
+<p>我预想的结果是把处理HTML的这部份放到子线程这样处理会更快，但结果是并没有。</p>
+<p><img src="/images/NSData_TFHpple_AFNetwoking对比.png" alt=""></p>
+<p>结果是，直接使用AFNetwoking，并且在里面对数据进行处理是最快的，当然，我只用真机测试了5次，可能会有偏差</p>
+<p>设备: iPhone5c , iOS10.2</p>
+<p>代码地址: <a href="https://github.com/magaofei/iOS_Apprentice/tree/master/NSURLSessionBackgroundData" target="_blank" rel="noopener">https://github.com/magaofei/iOS_Apprentice/tree/master/NSURLSessionBackgroundData</a></p>
+<p>后续：</p>
+<p>然而事情还远没有结束。当我把代码改动了之后，发现还有其他问题在等着我。</p>
+<p>如果使用AFNetworking请求数据，在GET方法中，我在收到了Data之后用TFHpple解析HTML，将处理后的数据保存到一个NSMutableArray中并返回，但并没有成功返回。我尝试使用<code>__block</code>修饰也不行，无奈放弃了这个方案。</p>
+<p>接着我换了另外一个方案使用<code>dispatch_semaphore</code>和<code>dispatch_group</code> 来做，但也遇到了挫折，的代码处理逻辑是</p>
+<ol>
+<li>从网络抓取，进入<code>loadTutorialsWithUrlString</code>方法</li>
+<li>在这个方法中创建group，异步执行group，创建信号量，在里面发起GET</li>
+<li>收到GET回来的数据后，在notifiy里对数据进行处理，然后返回</li>
+</ol>
+<p>但问题是，我在进入<code>loadTutorialsWithUrlString</code>之后就是异步的方法，其实我的网络请求处理数据这些会慢于其他动作，所以这个逻辑是失败的。</p>
+<p>我尝试更改它</p>
+<ol>
+<li>创建group，异步执行<code>loadTutorialsWithUrlString</code></li>
+<li>在方法中，先创建信号量，接着发起GET，方法最后发起等待信号量</li>
+<li>在方法执行完毕后，在notify里写入文件</li>
+</ol>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line">&#123;       _group = dispatch_group_create();</span><br><span class="line">        </span><br><span class="line">        dispatch_group_async(_group, dispatch_get_global_queue(<span class="number">0</span>, <span class="number">0</span>), ^&#123;</span><br><span class="line">            </span><br><span class="line">            [<span class="keyword">self</span> loadTutorialsWithUrlString:urlString];</span><br><span class="line">        &#125;);</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">        dispatch_group_notify(_group, dispatch_get_global_queue(<span class="number">0</span>, <span class="number">0</span>), ^&#123;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">//放到缓存中</span></span><br><span class="line">            <span class="comment">//Cache目录</span></span><br><span class="line">            <span class="built_in">NSString</span> *path = [<span class="built_in">NSSearchPathForDirectoriesInDomains</span>(<span class="built_in">NSCachesDirectory</span>, <span class="built_in">NSUserDomainMask</span>, <span class="literal">YES</span>) lastObject];</span><br><span class="line">            <span class="comment">//根据传入的文件名调用相关的文件，默认为安工要闻</span></span><br><span class="line">            <span class="built_in">NSString</span> *filePath = [path stringByAppendingPathComponent:plistName];</span><br><span class="line"><span class="comment">//            ayitNewsArray = _news;</span></span><br><span class="line">            </span><br><span class="line">            <span class="built_in">BOOL</span> WriteToFileBOOL = [<span class="built_in">NSKeyedArchiver</span> archiveRootObject:_ayitNewsArray toFile:filePath];</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> (WriteToFileBOOL) &#123; <span class="comment">//写入成功</span></span><br><span class="line">                <span class="built_in">NSLog</span>(<span class="string">@"写入成功"</span>);</span><br><span class="line">                <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>, filePath);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;   <span class="comment">//写入失败</span></span><br><span class="line">                <span class="built_in">NSLog</span>(<span class="string">@"写入失败"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">	<span class="keyword">return</span> _ayitNewsArray;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> mark - 格式化数据</span></span><br><span class="line">- (<span class="keyword">void</span>)loadTutorialsWithUrlString:(<span class="built_in">NSString</span> *)urlString&#123;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    <span class="built_in">NSLock</span> *lock = [[<span class="built_in">NSLock</span> alloc] init];</span><br><span class="line">    [lock lock];</span><br><span class="line">    <span class="comment">// 怀疑这里因为全局并发所以产生资源共享，所以这里lock</span></span><br><span class="line">    _semaphore = dispatch_semaphore_create(<span class="number">0</span>);</span><br><span class="line">    </span><br><span class="line">    [lock unlock];</span><br><span class="line">    </span><br><span class="line">    AFAppDotNetAPIClient *manager = [AFAppDotNetAPIClient manager];</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    manager.requestSerializer = [AFHTTPRequestSerializer serializer];</span><br><span class="line">    manager.responseSerializer = [AFHTTPResponseSerializer serializer];</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    [manager GET:urlString parameters:<span class="literal">nil</span> progress:^(<span class="built_in">NSProgress</span> * _Nonnull downloadProgress) &#123;</span><br><span class="line">        </span><br><span class="line">    &#125; success:^(<span class="built_in">NSURLSessionDataTask</span> * _Nonnull task, <span class="keyword">id</span>  _Nullable responseObject) &#123;</span><br><span class="line">        _data = responseObject;</span><br><span class="line">        <span class="built_in">NSMutableArray</span> *newsGroup = [<span class="built_in">NSMutableArray</span> array];</span><br><span class="line">        </span><br><span class="line">        TFHpple *hpple = [[TFHpple alloc] initWithHTMLData:_data];</span><br><span class="line">        <span class="built_in">NSString</span> *pathQueryString = <span class="string">@"//div[@class='newslist l']/ul/li/a"</span>; <span class="comment">//</span></span><br><span class="line">        <span class="built_in">NSArray</span> *Nodes = [hpple searchWithXPathQuery:pathQueryString];</span><br><span class="line">        <span class="keyword">for</span> (TFHppleElement *element <span class="keyword">in</span> Nodes) &#123;</span><br><span class="line">            </span><br><span class="line">            <span class="built_in">MKNewsItem</span> *newsItem = [[<span class="built_in">MKNewsItem</span> alloc] init];</span><br><span class="line">            </span><br><span class="line">            [newsGroup addObject:newsItem];</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 6</span></span><br><span class="line">            <span class="comment">//                tutorial.title = [[element firstChild] content];</span></span><br><span class="line">            newsItem.title = [element text];</span><br><span class="line">            newsItem.time = [[element firstChildWithTagName:<span class="string">@"span"</span>] content];</span><br><span class="line">            <span class="built_in">NSMutableString</span> *tempTime = [<span class="built_in">NSMutableString</span> stringWithFormat:<span class="string">@"%@"</span>, newsItem.time];</span><br><span class="line">            </span><br><span class="line">            <span class="comment">//删除时间前后的[]字符</span></span><br><span class="line">            [tempTime replaceCharactersInRange:<span class="built_in">NSMakeRange</span>(<span class="number">0</span>, <span class="number">1</span>) withString:<span class="string">@""</span>];</span><br><span class="line">            [tempTime replaceCharactersInRange:<span class="built_in">NSMakeRange</span>(<span class="number">10</span>, <span class="number">1</span>) withString:<span class="string">@""</span>];</span><br><span class="line">            newsItem.time = tempTime;</span><br><span class="line"></span><br><span class="line">            newsItem.url = [<span class="built_in">NSURL</span> URLWithString:[element objectForKey:<span class="string">@"href"</span>]];</span><br><span class="line">            </span><br><span class="line"></span><br><span class="line">            <span class="built_in">NSMutableString</span> *tempUrl = [<span class="built_in">NSMutableString</span> stringWithFormat:<span class="string">@"http://www.ayit.edu.cn%@"</span>,newsItem.url.absoluteString];</span><br><span class="line">            [tempUrl deleteCharactersInRange:<span class="built_in">NSMakeRange</span>(<span class="number">22</span>, <span class="number">2</span>)];  <span class="comment">//删除那两个..</span></span><br><span class="line">            newsItem.url = [<span class="built_in">NSURL</span> URLWithString:tempUrl];</span><br><span class="line">            </span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//        NSLog(@"%@", newsGroup);</span></span><br><span class="line">        _ayitNewsArray = newsGroup;</span><br><span class="line">        dispatch_semaphore_signal(_semaphore);</span><br><span class="line">        newsGroup = <span class="literal">nil</span>;</span><br><span class="line">        [manager invalidateSessionCancelingTasks:<span class="literal">YES</span>];</span><br><span class="line">        </span><br><span class="line">        <span class="built_in">NSLog</span>(<span class="string">@"thread = %@"</span>, [<span class="built_in">NSThread</span> currentThread]);</span><br><span class="line">    &#125; failure:^(<span class="built_in">NSURLSessionDataTask</span> * _Nullable task, <span class="built_in">NSError</span> * _Nonnull error) &#123;</span><br><span class="line">        <span class="built_in">NSLog</span>(<span class="string">@"发生错误！%@"</span>,error);</span><br><span class="line">        dispatch_semaphore_signal(_semaphore);</span><br><span class="line">        </span><br><span class="line">    &#125;];</span><br><span class="line">    <span class="comment">// 在网络请求成功之前 信号量等待中</span></span><br><span class="line">    dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但又发生了两个问题，我打开Leaks测试的时候，发现了内存泄露，排查了一下，发现居然是AFNetworking，想着这不可能啊，这么多人使用的框架怎么会有这种问题呢？接着我GOOGLE和很多次，最终在作者的提示下 <a href="https://github.com/AFNetworking/AFNetworking/issues/2149" target="_blank" rel="noopener">https://github.com/AFNetworking/AFNetworking/issues/2149</a></p>
+<p>在数据处理完毕后，调用<code>[manager invalidateSessionCancelingTasks:YES];</code>结束Session的请求，不然的话，我每一次发出请求之后，之前的请求还一直在，这就是为什么产生内存泄露的原因。然后依照网上的说话，继承了AFHTTPSessionManager，将其设置为单例，这样每次请求的manager只有一个。</p>
+<p>接着还有个多线程的问题，我在创建信号量的时候有小概率会出现 EXC_BAD_INSTRUCTION 错误。我怀疑是因为异步并发执行导致的资源共享，所以我用NSLock给它上锁，目前看来是解决了问题。</p>
+<p>才疏学浅，目前只能写到这里了。</p>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://magaofei.github.io">mark</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://magaofei.github.io/2017/01/02/30.%20%E4%BD%BF%E7%94%A8TFHpple%E5%A4%84%E7%90%86%E6%95%B0%E6%8D%AE%E7%9A%84%E8%AF%B7%E6%B1%82/">https://magaofei.github.io/2017/01/02/30.%20%E4%BD%BF%E7%94%A8TFHpple%E5%A4%84%E7%90%86%E6%95%B0%E6%8D%AE%E7%9A%84%E8%AF%B7%E6%B1%82/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/iOS/">iOS</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2017/01/15/31.%20iOS%EF%BC%8D%E5%BD%93%E9%81%87%E5%88%B0tableView%E6%95%B4%E4%BD%93%E4%B8%8A%E7%A7%BB%E6%97%B6%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">iOS－当遇到tableView整体上移时的解决方案</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    <a class="next" href="/2016/12/21/29.%20sqlite-for-iOS%E7%8A%AF%E7%9A%84%E9%94%992016%E5%B9%B412%E6%9C%8821%E6%97%A5/">
+        <span class="next-text nav-default">sqlite for iOS犯的错2016年12月21日</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"><div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:mamian521#email.com" class="iconfont icon-email" title="email"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">mark</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://magaofei.github.io/2017/01/02/30.%20%E4%BD%BF%E7%94%A8TFHpple%E5%A4%84%E7%90%86%E6%95%B0%E6%8D%AE%E7%9A%84%E8%AF%B7%E6%B1%82/';
+        this.page.identifier = '2017/01/02/30. 使用TFHpple处理数据的请求/';
+        this.page.title = '使用TFHpple处理数据的请求遇到的坑';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//wantme.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.6.0"></script>
+</body>
+</html>

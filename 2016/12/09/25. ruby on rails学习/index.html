@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="ruby on rails学习"/><link rel="alternate" href="/atom.xml" title="马面的部落格"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.6.0" />
+<link rel="canonical" href="https://magaofei.github.io/2016/12/09/25. ruby on rails学习/"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.6.0" />
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-86730422-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-86730422-1');
+</script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz",
+      appKey: "1i3I2spUT9rGlts0cWBGKLsv"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz","app_key":"1i3I2spUT9rGlts0cWBGKLsv"},"toc":"","fancybox":"","pjax":"","latex":""};
+</script>
+
+    <title>ruby on rails学习 - 马面的部落格</title>
+  <meta name="generator" content="Hexo 4.2.1"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">马面的部落格</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">首页
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">归档
+          </li>
+      </a><a href="/tags">
+        <li class="mobile-menu-item">标签
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">马面的部落格</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            首页
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            归档
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            标签
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">ruby on rails学习
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016-12-09
+        </span><span class="post-visits"
+             data-url="/2016/12/09/25.%20ruby%20on%20rails%E5%AD%A6%E4%B9%A0/"
+             data-title="ruby on rails学习">
+          阅读次数 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="ruby-on-rails学习"><a href="#ruby-on-rails学习" class="headerlink" title="ruby on rails学习"></a>ruby on rails学习</h1><p>（<strong>档案／资料夹 ：</strong>用途 ）</p>
+<p><strong>app/ ：</strong> 包含你应用程式的 controllers、models、views。你要改的东西大多是这些。</p>
+<p><strong>config/ ：</strong> 设定应用程式的执行阶段规则、路由设定（routes）、资料库等等。</p>
+<p><strong>db/ ：</strong>显示你目前资料库的 schema（结构定义），以及资料库的 migrations。</p>
+<p><strong>public/ ：</strong>这是唯一一个资料夹会是放什么就出现什么的。如果你把档案放里面，server 会直接回传，不会经过 Rails 的处理。</p>
+<p><strong>app/assets/ ：</strong>你会要把图片、JavaScript、stylesheets (CSS) 还有其他静态档案放在里面。现代的 Rails 应用程式使用一种叫做 Assets Pipeline 的东西，把在这资料夹里面的所有 JavaScript 和 CSS 档合并成一个档案来加速。</p>
+<p><code>rails new</code> 还建立了其他很多东西。大概可以写一本书来讲，所以我们现在先无视它们。</p>
+<h3 id="new-topics"><a href="#new-topics" class="headerlink" title="new topics"></a>new topics</h3><p>这些网页到底怎么建出来，又是如何连在一起的呢？Rails 的 scaffold 帮你处理好了。</p>
+<p>我们来仔细瞧瞧 rails 帮我们建立的档案：</p>
+<ul>
+<li><code>app/models/topic.rb</code></li>
+<li>这个档案里面有我们的 topic model 的程式码。如果你仔细看，他其实几乎是空白的。 对资料的新增、读取、更新、删除操作在 Rails 是内建的。</li>
+<li><code>app/views/topics</code></li>
+<li>这个资料夹里面有我们的 topics model 的 view 的程式码。 你刚刚使用的表单的程式码就放在这里面。Rails 会帮你建好这些档案作为 scaffold 的一部分。</li>
+<li>如果你以前写过 HTML，这些程式你应该不陌生。 Rails 的 view 只是 HTML 加上一些用来显示资料库来的资料的程式。</li>
+<li><code>app/views/topics/index.html.erb</code><ul>
+<li>这个程式是用在列出所有 topics 的页面。</li>
+<li>index 是用来表示一个网站或网站的一部分的“预设”页面。当你打开 <a href="http://localhost:3000/topics" target="_blank" rel="noopener">http://localhost:3000/topics</a> 的时候，topics 的 index 页面会传送到你的电脑上。 </li>
+</ul>
+</li>
+<li><code>app/views/topics/show.html.erb</code><ul>
+<li>是当你在 <code>Listing topics</code> 按一下 <code>show</code> 时会看到的页面。 </li>
+</ul>
+</li>
+<li><code>app/views/topics/new.html.erb</code><ul>
+<li>是当你按一下 <code>New Topic</code> 时会看到的页面。</li>
+<li><code>app/views/topics/edit.html.erb</code></li>
+<li>是当你按一下 <code>Edit</code> 时会看到的页面。 </li>
+</ul>
+</li>
+<li><code>app/views/topics/_form.html.erb</code><ul>
+<li>你或许注意到了，新增 topic 和编辑 topics 的页面长得很像。这是因为他们都使用了这个档案来显示表单。 这种档案称作 <code>partial</code>，因为他只有网页里面一部分的内容。Partial 的档名一定是底线开头的。 </li>
+<li>挑战题：你可以找到 partial 是在 new.html.erb 和 edit.html.erb 的哪一行程式被引用的吗？ </li>
+</ul>
+</li>
+<li><code>app/controllers/topics_controller.rb</code><ul>
+<li>这称为 controller 档，Rails 自动透过 scaffold 产生的。</li>
+<li>如果你打开来看，你会看到每一个 view ，除了 _form.html.erb 之外都对应到一个 method（开头是 def）。</li>
+</ul>
+</li>
+</ul>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://magaofei.github.io">mark</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://magaofei.github.io/2016/12/09/25.%20ruby%20on%20rails%E5%AD%A6%E4%B9%A0/">https://magaofei.github.io/2016/12/09/25.%20ruby%20on%20rails%E5%AD%A6%E4%B9%A0/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        
+        <nav class="post-nav"><a class="prev" href="/2016/12/14/26.%20data%E8%BD%ACNSString%E7%9A%84Encoding%E9%97%AE%E9%A2%98/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">data转NSString的Encoding问题</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    <a class="next" href="/2016/12/08/24.%20mongod-%E4%BD%BF%E7%94%A8/">
+        <span class="next-text nav-default">mongod 使用</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"><div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:mamian521#email.com" class="iconfont icon-email" title="email"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">mark</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://magaofei.github.io/2016/12/09/25.%20ruby%20on%20rails%E5%AD%A6%E4%B9%A0/';
+        this.page.identifier = '2016/12/09/25. ruby on rails学习/';
+        this.page.title = 'ruby on rails学习';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//wantme.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.6.0"></script>
+</body>
+</html>

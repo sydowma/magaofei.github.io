@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="熟悉Django的模板语言——Python第四周第二节"/><meta name="keywords" content="django, python, 马面的部落格" /><link rel="alternate" href="/atom.xml" title="马面的部落格"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.6.0" />
+<link rel="canonical" href="https://magaofei.github.io/2016/11/09/11. 熟悉Django的模板语言——Python第四周第二节/"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.6.0" />
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-86730422-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-86730422-1');
+</script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz",
+      appKey: "1i3I2spUT9rGlts0cWBGKLsv"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz","app_key":"1i3I2spUT9rGlts0cWBGKLsv"},"toc":"","fancybox":"","pjax":"","latex":""};
+</script>
+
+    <title>熟悉Django的模板语言——Python第四周第二节 - 马面的部落格</title>
+  <meta name="generator" content="Hexo 4.2.1"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">马面的部落格</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">首页
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">归档
+          </li>
+      </a><a href="/tags">
+        <li class="mobile-menu-item">标签
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">马面的部落格</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            首页
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            归档
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            标签
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">熟悉Django的模板语言——Python第四周第二节
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016-11-09
+        </span><span class="post-visits"
+             data-url="/2016/11/09/11.%20%E7%86%9F%E6%82%89Django%E7%9A%84%E6%A8%A1%E6%9D%BF%E8%AF%AD%E8%A8%80%E2%80%94%E2%80%94Python%E7%AC%AC%E5%9B%9B%E5%91%A8%E7%AC%AC%E4%BA%8C%E8%8A%82/"
+             data-title="熟悉Django的模板语言——Python第四周第二节">
+          阅读次数 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="熟悉Django的模板语言"><a href="#熟悉Django的模板语言" class="headerlink" title="熟悉Django的模板语言"></a>熟悉Django的模板语言</h1><h4 id="新建一个站点app"><a href="#新建一个站点app" class="headerlink" title="新建一个站点app"></a>新建一个站点app</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python3 manage.py startapp django_web</span><br></pre></td></tr></table></figure>
+<p>目录</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">templates站点资源</span><br><span class="line">views.py 负责去取数据和取templates</span><br><span class="line">models.py 负责去数据库取数据</span><br><span class="line"></span><br><span class="line">settings.py 默认设置，安全设置</span><br></pre></td></tr></table></figure>
+<h4 id="添加app到INSTALLED-APPS"><a href="#添加app到INSTALLED-APPS" class="headerlink" title="添加app到INSTALLED_APPS"></a>添加app到INSTALLED_APPS</h4><h4 id="添加视图函数"><a href="#添加视图函数" class="headerlink" title="添加视图函数"></a>添加视图函数</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span><span class="params">(request)</span>:</span></span><br><span class="line">    <span class="comment"># 定向到index页面</span></span><br><span class="line">    <span class="keyword">return</span> render(request, <span class="string">'index.html'</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="添加URL"><a href="#添加URL" class="headerlink" title="添加URL"></a>添加URL</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> django_web.views <span class="keyword">import</span> index</span><br><span class="line"><span class="comment"># app的视图函数中引入</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 分配一个url 网址</span></span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    url(<span class="string">r'^admin/'</span>, admin.site.urls),</span><br><span class="line">    url(<span class="string">r'^index/'</span>, index)  <span class="comment">#正则 ^匹配index前缀的站点 ，调用index函数</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>运行</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python3 manage.py runserver</span><br></pre></td></tr></table></figure>
+<p>发现CSS失效</p>
+<h4 id="引入资源文件"><a href="#引入资源文件" class="headerlink" title="引入资源文件"></a>引入资源文件</h4><p>将CSS和资源目录打包为static文件夹，将其放置在项目根目录下</p>
+<p>django模板语言</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;% load static %&#125;  <span class="comment">#获取所有static路径</span></span><br><span class="line">&lt;link rel=<span class="string">"stylesheet"</span> type=<span class="string">"text/css"</span> href=<span class="string">"&#123;% static 'css/new_blah.css' %&#125;"</span>&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="设置static"><a href="#设置static" class="headerlink" title="设置static"></a>设置static</h4><p>在settings.py中设置static</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">STATICFILES_DIRS = (os.path.join(BASE_DIR, <span class="string">'static'</span>),)</span><br></pre></td></tr></table></figure>
+<h4 id="request步骤"><a href="#request步骤" class="headerlink" title="request步骤"></a>request步骤</h4><ol>
+<li>经过Url</li>
+<li>指向于对应的View</li>
+<li>View和templates去找网页和数据</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">You have <span class="number">13</span> unapplied migration(s). Your project may <span class="keyword">not</span> work properly until you apply the migrations <span class="keyword">for</span> app(s): admin, auth, contenttypes, sessions.</span><br><span class="line">Run <span class="string">'python manage.py migrate'</span> to apply them.</span><br><span class="line"><span class="comment">#暂时不管</span></span><br></pre></td></tr></table></figure>
+<h4 id="分页功能"><a href="#分页功能" class="headerlink" title="分页功能"></a>分页功能</h4><ol>
+<li>理解上下文</li>
+<li>使用模板语言</li>
+<li>只做分页器</li>
+</ol>
+<h4 id="render-：渲染"><a href="#render-：渲染" class="headerlink" title="render()：渲染"></a>render()：渲染</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">render(request,<span class="string">'html'</span>,context)</span><br></pre></td></tr></table></figure>
+<p>接收三个函数</p>
+<ul>
+<li>request 用户点击的request</li>
+<li>x.html 我们指定模板的名称</li>
+<li>context 上下文</li>
+</ul>
+<h4 id="Context"><a href="#Context" class="headerlink" title="Context"></a>Context</h4><p>There’s a <u>Starman</u> waiting in the sky</p>
+<p>替换掉选中的文字其他部分不变</p>
+<h4 id="使用Context替换"><a href="#使用Context替换" class="headerlink" title="使用Context替换"></a>使用Context替换</h4><ol>
+<li><p>设置context</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span><span class="params">(request)</span>:</span></span><br><span class="line">    <span class="comment"># 定向到index页面</span></span><br><span class="line">    context = &#123;</span><br><span class="line">        <span class="string">'title'</span>: <span class="string">'Just a title'</span>,</span><br><span class="line">        <span class="string">'des'</span>: <span class="string">'Just a description'</span>,</span><br><span class="line">        <span class="string">'score'</span>: <span class="string">'1.0'</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> render(request, <span class="string">'index.html'</span>, context)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在html中替换，对应响应的context</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;h3&gt;&lt;a href="#"&gt;&#123;&#123; title &#125;&#125;&lt;/a&gt;&lt;/h3&gt;</span><br><span class="line">&lt;p class="description"&gt;&#123;&#123; des &#125;&#125;&lt;/p&gt;</span><br></pre></td></tr></table></figure>
+<p>​</p>
+</li>
+</ol>
+<p>context的值从数据库中取，Model连接数据库</p>
+<h4 id="Model设置"><a href="#Model设置" class="headerlink" title="Model设置"></a>Model设置</h4><p>django自带的是sqlite，我们自己使用的是mongodb，</p>
+<p>在settings里引入</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> mongoengine <span class="keyword">import</span> connect</span><br><span class="line">connect(<span class="string">'zhuanzhuan'</span>, host=<span class="string">'127.0.0.1'</span>, port=<span class="number">27017</span>)</span><br></pre></td></tr></table></figure>
+<p>之所以在settings里引入，是因为django在运行的过程中，是先从settings中读取数据进行加载</p>
+<p>在Model层引入</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> mongoengine <span class="keyword">import</span> *</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ArtInfo</span><span class="params">(Document)</span>:</span></span><br><span class="line">    <span class="comment"># 数据库中的必须全部取出</span></span><br><span class="line">    title = StringField()</span><br><span class="line">    img = StringField()</span><br><span class="line">    area = StringField()</span><br><span class="line">    price = StringField()</span><br><span class="line">    look_time = StringField()</span><br><span class="line"></span><br><span class="line">    meta = &#123;</span><br><span class="line">        <span class="string">'collection'</span>: <span class="string">'item_info'</span>  <span class="comment"># 寻找地方</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> ArtInfo.objects[:<span class="number">2</span>]:   <span class="comment">#[:2] 相当于mongo中的limit功能</span></span><br><span class="line">    print(i.title, i.img, i.price)</span><br></pre></td></tr></table></figure>
+<p>在View层中实例化</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span><span class="params">(request)</span>:</span></span><br><span class="line">    <span class="comment"># 实例化</span></span><br><span class="line">    item_info = ArtInfo.objects[:<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 定向到index页面</span></span><br><span class="line">    context = &#123;</span><br><span class="line">        <span class="string">'title'</span>: item_info[<span class="number">0</span>].title,</span><br><span class="line">        <span class="string">'des'</span>: item_info[<span class="number">0</span>].area,</span><br><span class="line">        <span class="string">'score'</span>: item_info[<span class="number">0</span>].price</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> render(request, <span class="string">'index.html'</span>, context)</span><br></pre></td></tr></table></figure>
+<p>使用分页函数</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 调用templates视图函数</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span><span class="params">(request)</span>:</span></span><br><span class="line">    limit = <span class="number">4</span></span><br><span class="line">    <span class="comment"># 实例化</span></span><br><span class="line">    item_info = ArtInfo.objects[:<span class="number">1</span>]</span><br><span class="line">    paginatior = Paginator(item_info, limit) <span class="comment">#每4个一页</span></span><br><span class="line">    page = request.GET.get(<span class="string">'page'</span>, <span class="number">1</span>)  <span class="comment"># 把request变成了页码</span></span><br><span class="line">    Loaded = paginatior.page(page)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 定向到index页面</span></span><br><span class="line">    context = &#123;</span><br><span class="line">        <span class="string">'ArtInfo'</span>: Loaded</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> render(request, <span class="string">'index.html'</span>, context)</span><br></pre></td></tr></table></figure>
+<p>设置HTML</p>
+<figure class="highlight django"><table><tr><td class="code"><pre><span class="line"><span class="comment">&#123;#            开始循环   #&#125;</span></span><br><span class="line"><span class="xml">            </span><span class="template-tag">&#123;% <span class="name"><span class="name">for</span></span> item <span class="keyword">in</span> ArtInfo %&#125;</span></span><br><span class="line"><span class="xml">                <span class="tag">&lt;<span class="name">li</span>&gt;</span></span></span><br><span class="line"><span class="xml">                    <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"</span></span></span><span class="template-variable">&#123;&#123; item.img &#125;&#125;</span><span class="xml"><span class="tag"><span class="string">"</span> <span class="attr">width</span>=<span class="string">"100"</span> <span class="attr">height</span>=<span class="string">"91"</span>&gt;</span></span></span><br><span class="line"><span class="xml">                    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"article-info"</span>&gt;</span></span></span><br><span class="line"><span class="xml">                        <span class="tag">&lt;<span class="name">h3</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"#"</span>&gt;</span></span><span class="template-variable">&#123;&#123; item.title &#125;&#125;</span><span class="xml"><span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span></span><br><span class="line"><span class="xml">                        <span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">"meta-info"</span>&gt;</span></span></span><br><span class="line"><span class="xml">                            <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"meta-cate"</span>&gt;</span>fun<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line"><span class="xml">                            <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"meta-cate"</span>&gt;</span>Wow<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line"><span class="xml">                        <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="xml">                        <span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">"description"</span>&gt;</span></span><span class="template-variable">&#123;&#123; item.area &#125;&#125;</span><span class="xml"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="xml">                    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="xml">                    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"rate"</span>&gt;</span></span></span><br><span class="line"><span class="xml">                        <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"rate-score"</span>&gt;</span></span><span class="template-variable">&#123;&#123; item.price &#125;&#125;</span><span class="xml"><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line"><span class="xml">                    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="xml">                <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line"><span class="xml">            </span><span class="template-tag">&#123;% <span class="name"><span class="name">endfor</span></span> %&#125;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight django"><table><tr><td class="code"><pre><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span> = <span class="string">"main-content-pagitor"</span>&gt;</span></span></span><br><span class="line"><span class="comment">&#123;#        &lt; pre 1 of 2 next&gt;#&#125;</span></span><br><span class="line"><span class="xml">        </span><span class="template-tag">&#123;% <span class="name"><span class="name">if</span></span> ArtInfo.has_previous %&#125;</span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"?page=</span></span></span><span class="template-variable">&#123;&#123; ArtInfo.previous_page_number &#125;&#125;</span><span class="xml"><span class="tag"><span class="string">"</span>&gt;</span><span class="tag">&lt; <span class="attr">Pre</span>&lt;/<span class="attr">a</span>&gt;</span></span></span><br><span class="line"><span class="xml">        </span><span class="template-tag">&#123;% <span class="name"><span class="name">endif</span></span> %&#125;</span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;<span class="name">span</span>&gt;</span> </span><span class="template-variable">&#123;&#123; ArtInfo.number &#125;&#125;</span><span class="xml"> of </span><span class="template-variable">&#123;&#123; ArtInfo.paginator.num_pages &#125;&#125;</span><span class="xml"><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line"><span class="xml">        </span><span class="template-tag">&#123;% <span class="name"><span class="name">if</span></span> ArtInfo.has_next %&#125;</span></span><br><span class="line"><span class="xml">            </span><span class="comment">&#123;% comment %&#125;如果有下一页，就显示这个连接, next_page_number &#123;% endcomment %&#125;</span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"?page=</span></span></span><span class="template-variable">&#123;&#123; ArtInfo.next_page_number &#125;&#125;</span><span class="xml"><span class="tag"><span class="string">"</span>&gt;</span>Next &gt;<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span></span><br><span class="line"><span class="xml">        </span><span class="template-tag">&#123;% <span class="name"><span class="name">endif</span></span> %&#125;</span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://magaofei.github.io">mark</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://magaofei.github.io/2016/11/09/11.%20%E7%86%9F%E6%82%89Django%E7%9A%84%E6%A8%A1%E6%9D%BF%E8%AF%AD%E8%A8%80%E2%80%94%E2%80%94Python%E7%AC%AC%E5%9B%9B%E5%91%A8%E7%AC%AC%E4%BA%8C%E8%8A%82/">https://magaofei.github.io/2016/11/09/11.%20%E7%86%9F%E6%82%89Django%E7%9A%84%E6%A8%A1%E6%9D%BF%E8%AF%AD%E8%A8%80%E2%80%94%E2%80%94Python%E7%AC%AC%E5%9B%9B%E5%91%A8%E7%AC%AC%E4%BA%8C%E8%8A%82/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/django/">django</a>
+            <a href="/tags/python/">python</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2016/11/09/10.%20%E9%A5%BF%E4%BA%86%E4%B9%88%E7%BD%91%E4%B8%8A%E8%AE%A2%E9%A4%90%E6%B5%81%E7%A8%8B/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">饿了么网上订餐流程</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    <a class="next" href="/2016/11/08/8.%20Node%E7%8E%AF%E5%A2%83%E4%BB%8B%E7%BB%8D/">
+        <span class="next-text nav-default">Node环境介绍</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"><div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:mamian521#email.com" class="iconfont icon-email" title="email"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">mark</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://magaofei.github.io/2016/11/09/11.%20%E7%86%9F%E6%82%89Django%E7%9A%84%E6%A8%A1%E6%9D%BF%E8%AF%AD%E8%A8%80%E2%80%94%E2%80%94Python%E7%AC%AC%E5%9B%9B%E5%91%A8%E7%AC%AC%E4%BA%8C%E8%8A%82/';
+        this.page.identifier = '2016/11/09/11. 熟悉Django的模板语言——Python第四周第二节/';
+        this.page.title = '熟悉Django的模板语言——Python第四周第二节';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//wantme.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.6.0"></script>
+</body>
+</html>

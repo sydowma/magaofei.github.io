@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="导航控制器的按钮设置(Storyboard)"/><meta name="keywords" content="iOS, Storyboard, 马面的部落格" /><link rel="alternate" href="/atom.xml" title="马面的部落格"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.6.0" />
+<link rel="canonical" href="https://magaofei.github.io/2016/11/11/12. 导航控制器的按钮设置(Storyboard)/"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.6.0" />
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-86730422-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-86730422-1');
+</script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz",
+      appKey: "1i3I2spUT9rGlts0cWBGKLsv"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz","app_key":"1i3I2spUT9rGlts0cWBGKLsv"},"toc":"","fancybox":"","pjax":"","latex":""};
+</script>
+
+    <title>导航控制器的按钮设置(Storyboard) - 马面的部落格</title>
+  <meta name="generator" content="Hexo 4.2.1"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">马面的部落格</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">首页
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">归档
+          </li>
+      </a><a href="/tags">
+        <li class="mobile-menu-item">标签
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">马面的部落格</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            首页
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            归档
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            标签
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">导航控制器的按钮设置(Storyboard)
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016-11-11
+        </span><span class="post-visits"
+             data-url="/2016/11/11/12.%20%E5%AF%BC%E8%88%AA%E6%8E%A7%E5%88%B6%E5%99%A8%E7%9A%84%E6%8C%89%E9%92%AE%E8%AE%BE%E7%BD%AE(Storyboard)/"
+             data-title="导航控制器的按钮设置(Storyboard)">
+          阅读次数 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="导航控制器的按钮设置-Storyboard"><a href="#导航控制器的按钮设置-Storyboard" class="headerlink" title="导航控制器的按钮设置(Storyboard)"></a>导航控制器的按钮设置(Storyboard)</h1><p>效果图:</p>
+
+<ol>
+<li><p>新建UIView, 放入 ViewController 中 </p>
+</li>
+<li><p>设置 UIView 的布局上左右都为0, 高度为44</p>
+
+</li>
+<li><p>更新Frame</p>
+ 
+</li>
+<li><p>放入3个 Button 到 UIView 中</p>
+</li>
+<li><p>设置第一个 Button 的布局, 上下左右都为0</p>
+
+</li>
+<li><p>设置第二个 Button 的布局, 右和下为0</p>
+
+</li>
+<li><p>在上一步的基础上, 设置第二个 Button 和第一个 Button 相同宽度和高度, </p>
+<ol>
+<li>按住 Control 键, 拖拽第二个 Button 到第一个 Button 松手</li>
+<li>按住 Shift 键, 选中 Equal Widths 和 Equal Heights</li>
+<li>最后点击 Add Constraints </li>
+</ol>
+
+</li>
+<li><p>设置第三个 Button 的布局, 右和下为0 (同第6步)</p>
+</li>
+<li><p>在上一步的基础上, 设置第三个 Button 和第二个 Button 相同宽度和高度 (同第7步)</p>
+</li>
+<li><p>选中三个 Button 同时按下<code>option</code> + <code>Command</code> + <code>=</code> 更新 Frame</p>
+</li>
+</ol>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://magaofei.github.io">mark</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://magaofei.github.io/2016/11/11/12.%20%E5%AF%BC%E8%88%AA%E6%8E%A7%E5%88%B6%E5%99%A8%E7%9A%84%E6%8C%89%E9%92%AE%E8%AE%BE%E7%BD%AE(Storyboard)/">https://magaofei.github.io/2016/11/11/12.%20%E5%AF%BC%E8%88%AA%E6%8E%A7%E5%88%B6%E5%99%A8%E7%9A%84%E6%8C%89%E9%92%AE%E8%AE%BE%E7%BD%AE(Storyboard)/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/iOS/">iOS</a>
+            <a href="/tags/Storyboard/">Storyboard</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2016/11/12/13.%20%E8%A5%BF%E5%8D%95%E5%A4%A7%E6%82%A6%E5%9F%8EApple%20Store%E4%BD%93%E9%AA%8C/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">西单大悦城Apple Store体验</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    <a class="next" href="/2016/11/09/10.%20%E9%A5%BF%E4%BA%86%E4%B9%88%E7%BD%91%E4%B8%8A%E8%AE%A2%E9%A4%90%E6%B5%81%E7%A8%8B/">
+        <span class="next-text nav-default">饿了么网上订餐流程</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"><div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:mamian521#email.com" class="iconfont icon-email" title="email"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">mark</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://magaofei.github.io/2016/11/11/12.%20%E5%AF%BC%E8%88%AA%E6%8E%A7%E5%88%B6%E5%99%A8%E7%9A%84%E6%8C%89%E9%92%AE%E8%AE%BE%E7%BD%AE(Storyboard)/';
+        this.page.identifier = '2016/11/11/12. 导航控制器的按钮设置(Storyboard)/';
+        this.page.title = '导航控制器的按钮设置(Storyboard)';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//wantme.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.6.0"></script>
+</body>
+</html>

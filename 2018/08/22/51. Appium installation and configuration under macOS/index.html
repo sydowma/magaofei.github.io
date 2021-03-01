@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="Appium installation and configuration under macOS"/><link rel="alternate" href="/atom.xml" title="马面的部落格"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.6.0" />
+<link rel="canonical" href="https://magaofei.github.io/2018/08/22/51. Appium installation and configuration under macOS/"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.6.0" />
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-86730422-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-86730422-1');
+</script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz",
+      appKey: "1i3I2spUT9rGlts0cWBGKLsv"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz","app_key":"1i3I2spUT9rGlts0cWBGKLsv"},"toc":"","fancybox":"","pjax":"","latex":""};
+</script>
+
+    <title>Appium installation and configuration under macOS - 马面的部落格</title>
+  <meta name="generator" content="Hexo 4.2.1"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">马面的部落格</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">首页
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">归档
+          </li>
+      </a><a href="/tags">
+        <li class="mobile-menu-item">标签
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">马面的部落格</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            首页
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            归档
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            标签
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">Appium installation and configuration under macOS
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-08-22
+        </span><span class="post-visits"
+             data-url="/2018/08/22/51.%20Appium%20installation%20and%20configuration%20under%20macOS/"
+             data-title="Appium installation and configuration under macOS">
+          阅读次数 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h3 id="iOS"><a href="#iOS" class="headerlink" title="iOS"></a>iOS</h3><p>System requirements and instructions:</p>
+<ul>
+<li>macOS 10.11 or higher</li>
+<li><code>brew</code>need the latest version of <code>Xcode</code> or <code>Xcode Command Line</code></li>
+</ul>
+<h4 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h4><p>iOS 9.3 and below use Automation as the underlying technology, XCUITest appears in iOS 9.3, and Automation is abandoned in iOS 10, so Appium is configured differently in iOS 9.3 and below than iOS 10.</p>
+<h3 id="Appium-Installation"><a href="#Appium-Installation" class="headerlink" title="Appium Installation"></a>Appium Installation</h3><p>If you have installed partial dependencies, you can skip it directly</p>
+<h4 id="Homebrew-Installation"><a href="#Homebrew-Installation" class="headerlink" title="Homebrew Installation"></a>Homebrew Installation</h4><p>It is highly recommended that all software on macOS be installed using Homebrew. Using the software installed by brew, the sudo command is no longer needed.</p>
+<p>Open terminal, copy and run：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;usr&#x2F;bin&#x2F;ruby -e &quot;$(curl -fsSL https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;Homebrew&#x2F;install&#x2F;master&#x2F;install)&quot;</span><br></pre></td></tr></table></figure>
+<p>The use of brew is very simple, install a software to use</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">brew install #&lt;package name&gt;</span><br></pre></td></tr></table></figure>
+<p>If the brew prompts that the Xcode version is too low, you need to install a new version of Xcode (you can save both versions when you install)</p>
+<p>Download url：<a href="https://developer.apple.com/download/more/" target="_blank" rel="noopener">https://developer.apple.com/download/more/</a></p>
+<h4 id="Nodejs-Installation"><a href="#Nodejs-Installation" class="headerlink" title="Nodejs Installation"></a>Nodejs Installation</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">brew install node@8</span><br></pre></td></tr></table></figure>
+<p>Check if the installation is successful</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">node -v</span><br><span class="line"># v6.9.1</span><br><span class="line">npm -v</span><br><span class="line"># 3.10.8</span><br></pre></td></tr></table></figure>
+<h4 id="Appium-Installation-1"><a href="#Appium-Installation-1" class="headerlink" title="Appium Installation"></a>Appium Installation</h4><p>Node.js usage</p>
+<p>Appium is essentially a Nodejs application, we can use npm to install it, after the installation is complete, you can use the command line to start</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install -g appium</span><br></pre></td></tr></table></figure>
+<p>You can use appium-doctor to confirm that the installation environment is complete.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install -g appium-doctor</span><br><span class="line">appium-doctor</span><br></pre></td></tr></table></figure>
+<p>Download App<br>The software is relatively simple, has a graphical interface, and has an Inspector tool to help detect interface elements.<br>Download url: <a href="https://github.com/appium/appium-desktop/releases" target="_blank" rel="noopener">https://github.com/appium/appium-desktop/releases</a></p>
+<h3 id="Appium-Settings"><a href="#Appium-Settings" class="headerlink" title="Appium Settings"></a>Appium Settings</h3><h4 id="Carthage-Installation"><a href="#Carthage-Installation" class="headerlink" title="Carthage Installation"></a>Carthage Installation</h4><p>Carthage is a package manager that manages iOS development library dependencies</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">brew install carthage</span><br></pre></td></tr></table></figure>
+<h4 id="Install-the-client-language"><a href="#Install-the-client-language" class="headerlink" title="Install the client language"></a>Install the client language</h4><p>Which language to use to install which language</p>
+<h4 id="python"><a href="#python" class="headerlink" title="python"></a>python</h4><p>Install Python 3 (skip with Python 2)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">brew install python3</span><br></pre></td></tr></table></figure>
+<p>Check successful installation</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python3 -V</span><br><span class="line"># Python 3.6.0</span><br><span class="line">pip3 -V</span><br><span class="line"># pip 9.0.1 from &#x2F;usr&#x2F;local&#x2F;lib&#x2F;python3.6&#x2F;site-packages (python 3.6)</span><br></pre></td></tr></table></figure>
+<p>Success with the corresponding code</p>
+<p>macOS comes with Python2 version. By default, python calls are the system’s python2 and pip (recommended to use virtual environment)</p>
+<p>In addition, if the system version has been installed before python3 causes the python3 command not found after installation, you can try <code>brew link --overwrite python3</code> relink</p>
+<p>Install using pip</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pip3 install Appium-Python-Client</span><br><span class="line"># python3 -&gt; pip3</span><br><span class="line"># python -&gt; pip</span><br></pre></td></tr></table></figure>
+<p>More information：<a href="https://github.com/appium/python-client" target="_blank" rel="noopener">https://github.com/appium/python-client</a></p>
+<h4 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h4><p>JDK Installation</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">brew tap caskroom&#x2F;versions</span><br><span class="line">brew cask install java8</span><br></pre></td></tr></table></figure>
+<p>Use Maven for dependencies</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">  &lt;groupId&gt;io.appium&lt;&#x2F;groupId&gt;</span><br><span class="line">  &lt;artifactId&gt;java-client&lt;&#x2F;artifactId&gt;</span><br><span class="line">  &lt;version&gt;6.1.0&lt;&#x2F;version&gt;</span><br><span class="line">  &lt;scope&gt;test&lt;&#x2F;scope&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br></pre></td></tr></table></figure>
+<p>More information：<a href="https://github.com/appium/java-client" target="_blank" rel="noopener">https://github.com/appium/java-client</a></p>
+<h4 id="Installation-related-dependencies"><a href="#Installation-related-dependencies" class="headerlink" title="Installation related dependencies"></a>Installation related dependencies</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">idevicesyslog&#96; and port forwarding &#96;iProxy&#96;, &#96;usbmuxd</span><br><span class="line">brew install libimobiledevice --HEAD   #Communicate with iOS phones</span><br><span class="line">brew install ideviceinstaller   # Install app use</span><br></pre></td></tr></table></figure>
+<p>Need to use on iOS10 or higher<code>ios-deploy</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install -g ios-deploy</span><br></pre></td></tr></table></figure>
+<p>Need for real devices<code>xcpretty</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gem install xcpretty</span><br></pre></td></tr></table></figure>
+<h4 id="First-run-configuration"><a href="#First-run-configuration" class="headerlink" title="First run configuration"></a>First run configuration</h4><p>No configuration will appear<code>xcodebuild exited with code &#39;65&#39; and signal &#39;null&#39;</code>error</p>
+<p>If have Developer account:</p>
+<p>AppiumDesktop add xcodeOrgId 和 xcodeSigningId fields</p>
+<p><img src="https://cdn-images-1.medium.com/max/1600/0*rsRDh_up1A510vSb.png" alt="img"></p>
+<p>TeamID is found in the Member ship on the left side of <a href="https://developer.apple.com/account/" target="_blank" rel="noopener">https://developer.apple.com/account/</a></p>
+<p>Requires <code>xcodeOrgId</code> and <code>xcodeSigningId</code> written in desired capabilities</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">      &quot;xcodeOrgId&quot;: &quot;&lt;Team ID&gt;&quot;,</span><br><span class="line">      &quot;xcodeSigningId&quot;: &quot;iPhone Developer&quot;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>the free AppleID account</p>
+<ol>
+<li>Find the location of WebDriverAgent in appium’s error log, open for signature</li>
+<li><code>[XCUITest] Using WDA path: &#39;/usr/local/lib/node_modules/appium/node_modules/.2.23.1@appium-xcuitest-driver/WebDriverAgent&#39;</code></li>
+<li>Change the <code>BundleID</code> of <code>WebDriverAgent</code>, which is <code>com.facebook.WebDriverAgentLib</code>. I suggest changing <code>facebook</code> to your name or company name. There is also a pit here. After changing this, I found that there is an error, and in <code>Build Settings</code>. Modify it in the <code>Product Bundle Identifier</code>.</li>
+</ol>
+<ol>
+<li>Click Product -&gt; Test in the menu bar above.<br>The first run will prompt no permission, open the settings app on the real machine, general -&gt; description file and device management, find your mailbox, select trust, and then continue to execute test, after successful startup, it can be explained, click after execution stop.</li>
+<li>End, open the Appium test.</li>
+</ol>
+<h4 id="View-interface-elements"><a href="#View-interface-elements" class="headerlink" title="View interface elements"></a>View interface elements</h4><ul>
+<li>use WebDriverAgent</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Clone from https:&#x2F;&#x2F;github.com&#x2F;facebook&#x2F;WebDriverAgent, execute the .&#x2F;Scripts&#x2F;bootstrap.sh command, and open the project to sign it.</span><br><span class="line">Implementation modalities</span><br><span class="line">- Then click on Product --&gt; test in the menu bar above.</span><br><span class="line">- xcodebuild -project WebDriverAgent.xcodeproj -scheme WebDriverAgentRunner -destination id&#x3D;&#39;udid&#39; test</span><br><span class="line"># udid can be obtained with the command idevice_id -l</span><br></pre></td></tr></table></figure>
+<p>use AppiumDesktop</p>
+<p>app-inspector usage</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># macaca-cli</span><br><span class="line">npm install macaca-cli -g</span><br><span class="line"># macaca doctor</span><br><span class="line">macaca doctor</span><br><span class="line"># app-inspector</span><br><span class="line">npm install app-inspector -g</span><br><span class="line"># usage</span><br><span class="line">app-inspector -u &#39;udid&#39;</span><br></pre></td></tr></table></figure>
+<h4 id="253-error-code"><a href="#253-error-code" class="headerlink" title="253 error code"></a>253 error code</h4><p>If you run the official TestApp example, you may get a 253 error, then you need to rebuild the test app (requires source code)</p>
+<p>xcodebuild command</p>
+<p>project</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">xcodebuild [-project projectname] [-target targetname ...] [-configuration configurationname]</span><br><span class="line">            [-sdk [sdkfullpath | sdkname]] [buildaction ...] [setting&#x3D;value ...]</span><br><span class="line">            [-userdefault&#x3D;value ...]</span><br></pre></td></tr></table></figure>
+<p>workspace</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">xcodebuild -workspace workspacename -scheme schemename [-destination destinationspecifier]</span><br><span class="line">            [-destination-timeout value] [-configuration configurationname]</span><br><span class="line">            [-sdk [sdkfullpath | sdkname]] [buildaction ...] [setting&#x3D;value ...]</span><br><span class="line">            [-userdefault&#x3D;value ...]</span><br></pre></td></tr></table></figure>
+<p>For example</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># xcodebuild -project RobotCalibration.xcodeproj -target RobotCalibration -sdk iphoneos -configuration development</span><br></pre></td></tr></table></figure>
+<h4 id="DesiredCapabilities-Configuration-information"><a href="#DesiredCapabilities-Configuration-information" class="headerlink" title="DesiredCapabilities Configuration information"></a>DesiredCapabilities Configuration information</h4><ul>
+<li>determine <code>**platformVersion**</code></li>
+<li>determine <code>**bundleId**</code></li>
+<li>If there is only one device, <code>udid</code> can be set to <code>auto</code></li>
+<li>You can also raise the <code>app</code> without providing the app attribute, but you need to set the <code>bundleId</code></li>
+<li>When testing iOS 9.3 or lower, you need to set <code>automationName</code> to <code>Automation</code> and others to <code>XCUITest</code>.</li>
+</ul>
+<h4 id="Common-command"><a href="#Common-command" class="headerlink" title="Common command"></a>Common command</h4><p>Switch Xcode</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo xcode-select -s #path &#x2F;Applications&#x2F;Xcode.app&#x2F;</span><br></pre></td></tr></table></figure>
+<p>view devices udid</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">idevice_id -l</span><br><span class="line"># Or use ideviceinfo to find udid in the returned data.</span><br></pre></td></tr></table></figure>
+<h3 id="Automation-（iOS-10-or-lower）"><a href="#Automation-（iOS-10-or-lower）" class="headerlink" title="Automation （iOS 10 or lower）"></a>Automation （iOS 10 or lower）</h3><p>Recommended Use:</p>
+<p>Xcode7.3.1</p>
+<p>note:</p>
+<p>In iOS8, you need to make sure UIAutomation in the developer options in the settings is open.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Have a developer account — &gt; Open Xcode — &gt; Register for device</span><br><span class="line">Free account ─&gt; open project —&gt; modify bundleID —&gt; login account to sign</span><br></pre></td></tr></table></figure>
+<p>Check if the set App directory is correct before testing.</p>
+<p>Then you can open Appium, and test cases.</p>
+<p>If you do not involve automatic installation and uninstallation of the app, you can manually install the app to the target device before testing.</p>
+<p>Prerequisites require <code>ideviceinstaller</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ideviceinstaller -u &lt;UDID of device&gt; -i &lt;path of .app&#x2F;.ipa&gt;</span><br></pre></td></tr></table></figure>
+<p>Instruments exited with code: 253</p>
+<p>[Instruments] Error launching instruments: Instruments crashed on startup</p>
+<p>May be the App path is incorrect</p>
+<h4 id="Authorized-iOS-Simulator"><a href="#Authorized-iOS-Simulator" class="headerlink" title="Authorized iOS Simulator"></a>Authorized iOS Simulator</h4><p>Need to test the simulator for this, install with npm</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install -g authorize-ios</span><br></pre></td></tr></table></figure>
+<p>Run after installation</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo authorize-ios</span><br></pre></td></tr></table></figure>
+<p>Note: you need to execute again after installing the new Xcode</p>
+<h4 id="Run-iOS-test-with-Jenkins-not-tested"><a href="#Run-iOS-test-with-Jenkins-not-tested" class="headerlink" title="Run iOS test with Jenkins (not tested)"></a>Run iOS test with Jenkins (not tested)</h4><p>Confirm that <code>authorize-ios</code> runs successfully before</p>
+<p>download Jenkins</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget https:&#x2F;&#x2F;jenkins.ci.cloudbees.com&#x2F;jnlpJars&#x2F;jenkins-cli.jar</span><br></pre></td></tr></table></figure>
+<p>Next define a Jenkins LaunchAgent to log in automatically, make sure it doesn’t include <code>SessionCreate</code> or <code>User</code>key key to prevent the test from running.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">java -jar jenkins-cli.jar \</span><br><span class="line"> -s https:&#x2F;&#x2F;team-appium.ci.cloudbees.com \</span><br><span class="line"> -i ~&#x2F;.ssh&#x2F;id_rsa \</span><br><span class="line"> on-premise-executor \</span><br><span class="line"> -fsroot ~&#x2F;jenkins \</span><br><span class="line"> -labels osx \</span><br><span class="line"> -name mac_appium</span><br></pre></td></tr></table></figure>
+<p>Finally set and start</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo nano &#x2F;Library&#x2F;LaunchAgents&#x2F;com.jenkins.ci.plist</span><br><span class="line">&lt;?xml version&#x3D;&quot;1.0&quot; encoding&#x3D;&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE plist PUBLIC &quot;-&#x2F;&#x2F;Apple&#x2F;&#x2F;DTD PLIST 1.0&#x2F;&#x2F;EN&quot; &quot;http:&#x2F;&#x2F;www.apple.com&#x2F;DTDs&#x2F;PropertyList-1.0.dtd&quot;&gt;</span><br><span class="line">&lt;plist version&#x3D;&quot;1.0&quot;&gt;</span><br><span class="line">&lt;dict&gt;</span><br><span class="line">    &lt;key&gt;Label&lt;&#x2F;key&gt;</span><br><span class="line">    &lt;string&gt;com.jenkins.ci&lt;&#x2F;string&gt;</span><br><span class="line">    &lt;key&gt;ProgramArguments&lt;&#x2F;key&gt;</span><br><span class="line">    &lt;array&gt;</span><br><span class="line">        &lt;string&gt;java&lt;&#x2F;string&gt;</span><br><span class="line">        &lt;string&gt;-Djava.awt.headless&#x3D;true&lt;&#x2F;string&gt;</span><br><span class="line">        &lt;string&gt;-jar&lt;&#x2F;string&gt;</span><br><span class="line">        &lt;string&gt;&#x2F;Users&#x2F;appium&#x2F;jenkins&#x2F;jenkins-cli.jar&lt;&#x2F;string&gt;</span><br><span class="line">        &lt;string&gt;-s&lt;&#x2F;string&gt;</span><br><span class="line">        &lt;string&gt;https:&#x2F;&#x2F;instructure.ci.cloudbees.com&lt;&#x2F;string&gt;</span><br><span class="line">        &lt;string&gt;on-premise-executor&lt;&#x2F;string&gt;</span><br><span class="line">        &lt;string&gt;-fsroot&lt;&#x2F;string&gt;</span><br><span class="line">        &lt;string&gt;&#x2F;Users&#x2F;appium&#x2F;jenkins&lt;&#x2F;string&gt;</span><br><span class="line">        &lt;string&gt;-executors&lt;&#x2F;string&gt;</span><br><span class="line">        &lt;string&gt;1&lt;&#x2F;string&gt;</span><br><span class="line">        &lt;string&gt;-labels&lt;&#x2F;string&gt;</span><br><span class="line">        &lt;string&gt;mac&lt;&#x2F;string&gt;</span><br><span class="line">        &lt;string&gt;-name&lt;&#x2F;string&gt;</span><br><span class="line">        &lt;string&gt;mac_appium&lt;&#x2F;string&gt;</span><br><span class="line">        &lt;string&gt;-persistent&lt;&#x2F;string&gt;</span><br><span class="line">    &lt;&#x2F;array&gt;</span><br><span class="line">    &lt;key&gt;KeepAlive&lt;&#x2F;key&gt;</span><br><span class="line">    &lt;true&#x2F;&gt;</span><br><span class="line">    &lt;key&gt;StandardOutPath&lt;&#x2F;key&gt;</span><br><span class="line">    &lt;string&gt;&#x2F;Users&#x2F;appium&#x2F;jenkins&#x2F;stdout.log&lt;&#x2F;string&gt;</span><br><span class="line">    &lt;key&gt;StandardErrorPath&lt;&#x2F;key&gt;</span><br><span class="line">    &lt;string&gt;&#x2F;Users&#x2F;appium&#x2F;jenkins&#x2F;error.log&lt;&#x2F;string&gt;</span><br><span class="line">&lt;&#x2F;dict&gt;</span><br><span class="line">&lt;&#x2F;plist&gt;</span><br></pre></td></tr></table></figure>
+<p>Finally set the owner, permissions, and then start the agent.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo chown root:wheel &#x2F;Library&#x2F;LaunchAgents&#x2F;com.jenkins.ci.plist</span><br><span class="line">sudo chmod 644 &#x2F;Library&#x2F;LaunchAgents&#x2F;com.jenkins.ci.plist</span><br><span class="line">launchctl load &#x2F;Library&#x2F;LaunchAgents&#x2F;com.jenkins.ci.plist</span><br><span class="line">launchctl start com.jenkins.ci</span><br></pre></td></tr></table></figure>
+<h4 id="Clean-up-files-optional"><a href="#Clean-up-files-optional" class="headerlink" title="Clean up files (optional)"></a>Clean up files (optional)</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$HOME&#x2F;Library&#x2F;Logs&#x2F;CoreSimulator&#x2F;</span><br><span class="line">&#x2F;Library&#x2F;Caches&#x2F;com.apple.dt.instruments&#x2F;</span><br><span class="line">$HOME&#x2F;Library&#x2F;Developer&#x2F;Xcode&#x2F;DerivedData&#x2F;</span><br></pre></td></tr></table></figure>
+<p>All files in the above directory</p>
+<h3 id="Android"><a href="#Android" class="headerlink" title="Android"></a>Android</h3><h4 id="maven-Installation"><a href="#maven-Installation" class="headerlink" title="maven Installation"></a>maven Installation</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">brew install maven</span><br></pre></td></tr></table></figure>
+<h4 id="More-settings"><a href="#More-settings" class="headerlink" title="More settings"></a>More settings</h4><ol>
+<li>download JDK</li>
+<li>Download the Android SDK via Android Studio and set up the directory</li>
+</ol>
+<p>macOS sets up the JavaHome and Android SDK directories and places the following code in <code>.bashrc</code> or <code>.zshrc</code> in the user directory</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># the path of use Android Studio installation after </span><br><span class="line"># android sdk</span><br><span class="line">export ANDROID_HOME&#x3D;~&#x2F;Library&#x2F;Android&#x2F;sdk</span><br><span class="line">export PATH&#x3D;&quot;$HOME&#x2F;.yarn&#x2F;bin:$PATH&quot;</span><br><span class="line"># java_home</span><br><span class="line">export JAVA_HOME&#x3D;$(&#x2F;usr&#x2F;libexec&#x2F;java_home)</span><br><span class="line">export PATH&#x3D;$JAVA_HOME&#x2F;bin:$PATH</span><br><span class="line">export CLASS_PATH&#x3D;$JAVA_HOME&#x2F;lib</span><br><span class="line"># adb...</span><br><span class="line">export PATH&#x3D;$&#123;PATH&#125;:$ANDROID_HOME&#x2F;tools:$ANDROID_HOME&#x2F;platform-tools</span><br><span class="line">export PATH&#x3D;$&#123;PATH&#125;:$ANDROID_HOME&#x2F;tools&#x2F;bin</span><br></pre></td></tr></table></figure>
+<p>At latest，You can use appium-doctor to check the configuration environment</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">appium-doctor</span><br></pre></td></tr></table></figure>
+<p>Write clearly in capabilities</p>
+<ul>
+<li><code>platformVersion</code></li>
+<li><code>appPackage</code></li>
+<li><code>appActivity</code></li>
+</ul>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://magaofei.github.io">mark</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://magaofei.github.io/2018/08/22/51.%20Appium%20installation%20and%20configuration%20under%20macOS/">https://magaofei.github.io/2018/08/22/51.%20Appium%20installation%20and%20configuration%20under%20macOS/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        
+        <nav class="post-nav"><a class="prev" href="/2019/06/21/53.%20ELK%20%E6%90%AD%E5%BB%BA/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">ELK 搭建</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    <a class="next" href="/2018/08/17/50.%20MobSF%20%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
+        <span class="next-text nav-default">MobSF源码分析</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"><div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:mamian521#email.com" class="iconfont icon-email" title="email"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">mark</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://magaofei.github.io/2018/08/22/51.%20Appium%20installation%20and%20configuration%20under%20macOS/';
+        this.page.identifier = '2018/08/22/51. Appium installation and configuration under macOS/';
+        this.page.title = 'Appium installation and configuration under macOS';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//wantme.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.6.0"></script>
+</body>
+</html>

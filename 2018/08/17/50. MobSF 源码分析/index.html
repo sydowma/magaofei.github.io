@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="MobSF源码分析"/><link rel="alternate" href="/atom.xml" title="马面的部落格"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.6.0" />
+<link rel="canonical" href="https://magaofei.github.io/2018/08/17/50. MobSF 源码分析/"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.6.0" />
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-86730422-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-86730422-1');
+</script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz",
+      appKey: "1i3I2spUT9rGlts0cWBGKLsv"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz","app_key":"1i3I2spUT9rGlts0cWBGKLsv"},"toc":"","fancybox":"","pjax":"","latex":""};
+</script>
+
+    <title>MobSF源码分析 - 马面的部落格</title>
+  <meta name="generator" content="Hexo 4.2.1"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">马面的部落格</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">首页
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">归档
+          </li>
+      </a><a href="/tags">
+        <li class="mobile-menu-item">标签
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">马面的部落格</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            首页
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            归档
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            标签
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">MobSF源码分析
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-08-17
+        </span><span class="post-visits"
+             data-url="/2018/08/17/50.%20MobSF%20%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"
+             data-title="MobSF源码分析">
+          阅读次数 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>MobSF(Mobile-Security-Framework-MobSF)，是一个基于 Django 的移动端安全扫描应用。GitHub 地址：<a href="https://github.com/MobSF/Mobile-Security-Framework-MobSF" target="_blank" rel="noopener">https://github.com/MobSF/Mobile-Security-Framework-MobSF</a></p>
+<p>下边打算简单分析一下源码</p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><h4 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">.</span><br><span class="line">├── DynamicAnalyzer #动态扫描 app</span><br><span class="line">│   ├── tools  # 运行平台对应的 adb 工具和工具包等</span><br><span class="line">│   └── views  # 功能函数</span><br><span class="line">├── LICENSES </span><br><span class="line">├── MalwareAnalyzer  # 恶意软件扫描</span><br><span class="line">├── MobSF   # 项目项目，设置等文件</span><br><span class="line">│   ├── forms.py      # 上传文件接口表单</span><br><span class="line">│   ├── kali_fix.sh</span><br><span class="line">│   ├── models.py</span><br><span class="line">│   ├── rest_api.py   # 对外 RESTAPI</span><br><span class="line">│   ├── settings.py   # 配置文件</span><br><span class="line">│   ├── urls.py       # URL 路由函数</span><br><span class="line">│   ├── utils.py      # 通用的一些功能，比如寻找 Java，检查更新，获取 apiKey 等</span><br><span class="line">│   ├── views.py      # 视图函数</span><br><span class="line">│   └── wsgi.py </span><br><span class="line">├── StaticAnalyzer</span><br><span class="line">│   ├── models.py   # ORM</span><br><span class="line">│   ├── tests.py    # 单元测试</span><br><span class="line">│   ├── migrations  # SQL 脚本</span><br><span class="line">│   ├── test_files  # 测试文件</span><br><span class="line">│   ├── tools       # 用到的工具包</span><br><span class="line">│   └── views       # 功能实现函数</span><br><span class="line">├── downloads</span><br><span class="line">│   ├── 3857ea931f051b319b558488518e7c16-screenshots-apk # 动态扫描产生的截图等</span><br><span class="line">├── install  </span><br><span class="line">│   └── windows  # 扫描 Windows appx </span><br><span class="line">├── logs         # 日志</span><br><span class="line">│   └── certs</span><br><span class="line">├── scripts      # shell 脚本</span><br><span class="line">│   └── cloud</span><br><span class="line">├── static       # CSS JS 文件</span><br><span class="line">│   ├── bootstrap</span><br><span class="line">│   ├── css</span><br><span class="line">│   ├── dash</span><br><span class="line">│   ├── fonts</span><br><span class="line">│   ├── img</span><br><span class="line">│   ├── js</span><br><span class="line">│   └── plugins</span><br><span class="line">├── templates  # HTML 文件</span><br><span class="line">│   ├── dynamic_analysis</span><br><span class="line">│   ├── general</span><br><span class="line">│   ├── pdf</span><br><span class="line">│   └── static_analysis</span><br><span class="line">└── uploads</span><br><span class="line">    ├── 2ff4f3be34ff3b8763671b77790da91e #上传的文件</span><br></pre></td></tr></table></figure>
+<p>由此可见，源代码当中，需要关注的是 <code>MobSF</code> 、<code>StaticAnalyzer</code> 、<code>DynamicAnalyzer</code> ，而里边 <code>MobSF</code>主要是 Django 的一些设置和 API ，动态分析用的不多，所以最重要的还是 <code>StaticAnalyzer</code> 这个 App 需要重点去关注。</p>
+<h3 id="Django-部分"><a href="#Django-部分" class="headerlink" title="Django 部分"></a>Django 部分</h3><p>刚开始部署的时候我发现很奇怪的一个地方，这个项目居然在源码中保留了 static 文件夹，一般 Django 项目到发布的时候才会生成这个文件夹，如果放到源代码管理中，势必要增大项目的体积。</p>
+<p>还有一点就是 Log 打印的并不友好，代码中出现了大量的 <code>print</code> 语句，而不是 log 模块。</p>
+<p>还有在 <code>rest_api</code> 的处理也可以看出，写的非常随意，表单效验没有，通篇的 IF_ELSE ，让人看了难受。知道作者是印度人后，我就知道了什么，我打算提交一些 <code>Pull Request</code> ，如果允许的话，我是愿意帮忙改改的。</p>
+<h4 id="ORM"><a href="#ORM" class="headerlink" title="ORM"></a>ORM</h4><p>数据库部分只有<code>StaticAnalyzer</code>部分用到，同样，这一部分也是最常用的功能</p>
+<h3 id="扫描部分"><a href="#扫描部分" class="headerlink" title="扫描部分"></a>扫描部分</h3><h4 id="静态分析"><a href="#静态分析" class="headerlink" title="静态分析"></a>静态分析</h4><p>在对样本进行静态分析时，MobSF主要使用了现有的dex2jar、dex2smali、jar2java、AXMLPrinter、CertPrint等工具。其主要完成了两项工作： 解析AndroidManifest.xml得到了应用程序的各类相关信息、 对apk进行反编译得到java代码，而后利用正则匹配找出该样本主要进行了哪些工作。    </p>
+<h4 id="动态分析"><a href="#动态分析" class="headerlink" title="动态分析"></a>动态分析</h4><p>仅限于 Android，动态分析在真机运行需要 WiFiADB，速度慢，效果不理想</p>
+<h5 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h5><p>而在对样本进行动态分析时，MobSF主要利用到了Xposed框架、Droidmon实现对应用程序调用API的情况进行监控，并且可灵活维护一份需要hook的API列表。同时，MobSF还使用了DataPusher来对样本数据进行打包、使用了ScreenCast结合adb shell input完成对手机的远程控制功能。当然，其中还使用隐藏root权限、伪造成正式机器等技术来应对一些反虚拟机的程序。其主要做了一下几件事： </p>
+<p>1、利用webproxy实现代理进而拦截样本流量。 </p>
+<p>2、安装证书以便拦截https流量。 </p>
+<p>3、遍历所有activity，尽量多的获取各activity运行得到的日志。</p>
+<p> 4、利用正则匹配出API及参数和返回值。</p>
+<p>5、实时更新恶意url库，以url信息特征进行查杀。 </p>
+<h4 id="URLS"><a href="#URLS" class="headerlink" title="URLS"></a>URLS</h4><p>四部分</p>
+<ul>
+<li><code>MobSF.views</code> 里边主要是HTML页面</li>
+<li><code>StaticAnalyzer.views</code> Android 静态分析</li>
+<li><code>DynamicAnalyzer.views</code> Android 动态分析</li>
+<li><code>MobSF.rest_api</code> 对外的REST API (其实根本不 REST)</li>
+</ul>
+<h4 id="Views"><a href="#Views" class="headerlink" title="Views"></a>Views</h4><p><code>MobSF.views</code>这里边主要是一些 HTML 页面和部分功能(upload/delete)</p>
+<p><code>StaticAnalyzer.views</code> 静态扫描的功能函数</p>
+<h4 id="StaticAnalyzer"><a href="#StaticAnalyzer" class="headerlink" title="StaticAnalyzer"></a>StaticAnalyzer</h4><h5 id="ORM-1"><a href="#ORM-1" class="headerlink" title="ORM"></a>ORM</h5><p>数据库写的很简单</p>
+<ul>
+<li>RecentScansDB</li>
+<li>StaticAnalyzerAndroid</li>
+<li>StaticAnalyzerIPA</li>
+<li>StaticAnalyzerIOSZIP</li>
+<li>StaticAnalyzerWindows</li>
+</ul>
+<p>可以看出来，首先扫描之后会往 <code>RecentScansDB</code>写入数据，然后根据不同的文件往不同的库里写详细数据，两者是用MD5值来判断指定文件。</p>
+<h4 id="功能实现"><a href="#功能实现" class="headerlink" title="功能实现"></a>功能实现</h4><h5 id="扫描-API-的实现"><a href="#扫描-API-的实现" class="headerlink" title="扫描 API 的实现"></a>扫描 API 的实现</h5><ol>
+<li><code>MobSF.rest_api.api_scan()</code></li>
+<li><code>StaticAnalyzer.views.android.static_analyzer()</code></li>
+</ol>
+<p>在<code>static_analyzer()</code> 函数里边可以看到一些数据的获取，基本上是用字典来存取各类信息，这个信息由一个响应的的功能函数得到，而这个功能函数，你点进去看，会发现是执行的 Shell，在 Shell 输出的时候，会有一些正则等匹配方式，去拿到想要的数值，然后返回。最后程序写入库中。</p>
+<h4 id="Android-静态扫描"><a href="#Android-静态扫描" class="headerlink" title="Android 静态扫描"></a>Android 静态扫描</h4><p>未完待续</p>
+<h4 id="iOS-静态扫描"><a href="#iOS-静态扫描" class="headerlink" title="iOS 静态扫描"></a>iOS 静态扫描</h4><p>未完待续</p>
+<h5 id="其他-API"><a href="#其他-API" class="headerlink" title="其他 API"></a>其他 API</h5><p>在<code>StaticAnalyzer.views</code> 里需要先重点看一下 <code>shared_func.py</code> 文件</p>
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1. http:&#x2F;&#x2F;purpleroc.com&#x2F;MD&#x2F;2016-08-31@Android%20Malware%20Analysis%20Tool(1)--MobSF.html</span><br></pre></td></tr></table></figure>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://magaofei.github.io">mark</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://magaofei.github.io/2018/08/17/50.%20MobSF%20%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">https://magaofei.github.io/2018/08/17/50.%20MobSF%20%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        
+        <nav class="post-nav"><a class="prev" href="/2018/08/22/51.%20Appium%20installation%20and%20configuration%20under%20macOS/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Appium installation and configuration under macOS</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    <a class="next" href="/2018/06/15/49.%20fabric2%E7%9A%84%E4%BD%BF%E7%94%A8/">
+        <span class="next-text nav-default">fabric2的使用</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"><div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:mamian521#email.com" class="iconfont icon-email" title="email"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">mark</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://magaofei.github.io/2018/08/17/50.%20MobSF%20%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/';
+        this.page.identifier = '2018/08/17/50. MobSF 源码分析/';
+        this.page.title = 'MobSF源码分析';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//wantme.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.6.0"></script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="retainCount并不能返回正确的数值"/><link rel="alternate" href="/atom.xml" title="马面的部落格"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.6.0" />
+<link rel="canonical" href="https://magaofei.github.io/2016/12/07/22. retainCount并不能返回正确的数值/"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.6.0" />
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-86730422-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-86730422-1');
+</script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz",
+      appKey: "1i3I2spUT9rGlts0cWBGKLsv"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz","app_key":"1i3I2spUT9rGlts0cWBGKLsv"},"toc":"","fancybox":"","pjax":"","latex":""};
+</script>
+
+    <title>retainCount并不能返回正确的数值 - 马面的部落格</title>
+  <meta name="generator" content="Hexo 4.2.1"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">马面的部落格</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">首页
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">归档
+          </li>
+      </a><a href="/tags">
+        <li class="mobile-menu-item">标签
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">马面的部落格</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            首页
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            归档
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            标签
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">retainCount并不能返回正确的数值
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016-12-07
+        </span><span class="post-visits"
+             data-url="/2016/12/07/22.%20retainCount%E5%B9%B6%E4%B8%8D%E8%83%BD%E8%BF%94%E5%9B%9E%E6%AD%A3%E7%A1%AE%E7%9A%84%E6%95%B0%E5%80%BC/"
+             data-title="retainCount并不能返回正确的数值">
+          阅读次数 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="retainCount并不能返回正确的数值"><a href="#retainCount并不能返回正确的数值" class="headerlink" title="retainCount并不能返回正确的数值"></a>retainCount并不能返回正确的数值</h1><p>我想通过<code>retainCount</code>来理解引用计数，在网上搜了搜，看到了这个方法</p>
+<p>相同意思的两行代码，却返回了不同的结果</p>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line"><span class="built_in">NSDate</span> *now = [<span class="built_in">NSDate</span> date];</span><br><span class="line">        <span class="built_in">NSDate</span> *nowinit = [[<span class="built_in">NSDate</span> alloc] init];</span><br><span class="line">        <span class="built_in">NSLog</span>(<span class="string">@"now = %@, retain count = %ld"</span>, now,</span><br><span class="line">              <span class="built_in">CFGetRetainCount</span>((__bridge <span class="built_in">CFTypeRef</span>)(now)));</span><br><span class="line">        <span class="built_in">NSLog</span>(<span class="string">@"nowinit = %@, retain count = %ld"</span>, nowinit,</span><br><span class="line">              <span class="built_in">CFGetRetainCount</span>((__bridge <span class="built_in">CFTypeRef</span>)(nowinit)));</span><br></pre></td></tr></table></figure>
+<p>retainCount的值</p>
+<p><code>[NSDate date]</code>输出的结果是2</p>
+<p><code>[[NSDate alloc] init]</code>输出的结果是1</p>
+<p>这让我大为不解，从结果来看，他们是完全相同的，不应该会是这样，如果不同的话，其他人也应该会指出的，但我没发现有人说出来。</p>
+<p>我尝试Google了一下，Google上第一个就是 <a href="http://blog.csdn.net/wzzvictory/article/details/9626017" target="_blank" rel="noopener">Cocoa中retainCount返回值不准的原因</a>这个，看了之后我才发现，Apple也说了，这个东西不准，我干，既然不准，这个方法还存在干嘛。我有看到<a href="http://stackoverflow.com/questions/4636146/when-to-use-retaincount" target="_blank" rel="noopener">StackOverFlow</a>上面的回答，他劝我们使用 Instruments 中的 Leaks 和 Zombies 来检测泄露的内存和僵尸对象。</p>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://magaofei.github.io">mark</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://magaofei.github.io/2016/12/07/22.%20retainCount%E5%B9%B6%E4%B8%8D%E8%83%BD%E8%BF%94%E5%9B%9E%E6%AD%A3%E7%A1%AE%E7%9A%84%E6%95%B0%E5%80%BC/">https://magaofei.github.io/2016/12/07/22.%20retainCount%E5%B9%B6%E4%B8%8D%E8%83%BD%E8%BF%94%E5%9B%9E%E6%AD%A3%E7%A1%AE%E7%9A%84%E6%95%B0%E5%80%BC/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        
+        <nav class="post-nav"><a class="prev" href="/2016/12/08/24.%20mongod-%E4%BD%BF%E7%94%A8/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">mongod 使用</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    <a class="next" href="/2016/12/07/23.%20autoLayoutAndFrame/">
+        <span class="next-text nav-default">autoLayout</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"><div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:mamian521#email.com" class="iconfont icon-email" title="email"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">mark</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://magaofei.github.io/2016/12/07/22.%20retainCount%E5%B9%B6%E4%B8%8D%E8%83%BD%E8%BF%94%E5%9B%9E%E6%AD%A3%E7%A1%AE%E7%9A%84%E6%95%B0%E5%80%BC/';
+        this.page.identifier = '2016/12/07/22. retainCount并不能返回正确的数值/';
+        this.page.title = 'retainCount并不能返回正确的数值';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//wantme.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.6.0"></script>
+</body>
+</html>

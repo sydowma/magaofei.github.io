@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="算法学习第一节"/><link rel="alternate" href="/atom.xml" title="马面的部落格"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.6.0" />
+<link rel="canonical" href="https://magaofei.github.io/2016/11/26/20. 算法学习第一节/"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.6.0" />
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-86730422-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-86730422-1');
+</script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz",
+      appKey: "1i3I2spUT9rGlts0cWBGKLsv"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz","app_key":"1i3I2spUT9rGlts0cWBGKLsv"},"toc":"","fancybox":"","pjax":"","latex":""};
+</script>
+
+    <title>算法学习第一节 - 马面的部落格</title>
+  <meta name="generator" content="Hexo 4.2.1"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">马面的部落格</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">首页
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">归档
+          </li>
+      </a><a href="/tags">
+        <li class="mobile-menu-item">标签
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">马面的部落格</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            首页
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            归档
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            标签
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">算法学习第一节
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016-11-26
+        </span><span class="post-visits"
+             data-url="/2016/11/26/20.%20%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%AC%E4%B8%80%E8%8A%82/"
+             data-title="算法学习第一节">
+          阅读次数 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="Dynamic-Connectivity-动态连通性"><a href="#Dynamic-Connectivity-动态连通性" class="headerlink" title="Dynamic Connectivity(动态连通性)"></a>Dynamic Connectivity(动态连通性)</h1><p>Question：</p>
+<p>How many connected components result after performing the following sequence of <em>union</em> operations on a set of 10 items?</p>
+<p>1-2 3-4 5-6 7-8 7-9 2-8 0-5 1-9</p>
+<p>Answer:</p>
+<p>3</p>
+<p>个人见解：这个问题是说，有几个连通的集合，比如1-2，说明1和2之间是连接的，那么1-2 和 2-8 说明1到8之间是连通状态，那么他们三个是一个集合，由此计算，总共有3个集合</p>
+<h3 id="Quick-Find（快速查找、贪心算法）"><a href="#Quick-Find（快速查找、贪心算法）" class="headerlink" title="Quick Find（快速查找、贪心算法）"></a>Quick Find（快速查找、贪心算法）</h3><p>code:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">QuickFindUF</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span>[] id;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">QuickFindUF</span><span class="params">(<span class="keyword">int</span> N)</span> </span>&#123;</span><br><span class="line">    id = <span class="keyword">new</span> <span class="keyword">int</span>[N];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; i++)  <span class="comment">// set id of each object to itself</span></span><br><span class="line">      id[i] = i;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">connected</span><span class="params">(<span class="keyword">int</span> p, <span class="keyword">int</span> q)</span> </span>&#123;  <span class="comment">//check whether p and q are in the same component</span></span><br><span class="line">    <span class="keyword">return</span> id[p] == id[q];</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">union</span><span class="params">(<span class="keyword">int</span> p, <span class="keyword">int</span> q)</span> </span>&#123;  <span class="comment">// change all entries with id[p] to id[q]</span></span><br><span class="line">    <span class="keyword">int</span> pid = id[p];</span><br><span class="line">    <span class="keyword">int</span> qid = id[q];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; id.length; i++) </span><br><span class="line">      <span class="keyword">if</span> (id[i] == pid) id[i] = qid;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>将连接到的数字更改为相同数字</li>
+<li>相同的数组元素就意味着连通</li>
+</ol>
+<p>时间复杂度</p>
+<p>缺点 时间复杂度太大</p>
+<h1 id="Quick-Union"><a href="#Quick-Union" class="headerlink" title="Quick Union"></a>Quick Union</h1><p>把数组看作一组树，数组中每一项是它在树中的父节点</p>
+<p>Question:</p>
+<p>Suppose that in a quick-union data structure on 10 elements that the id[] array is </p>
+<p>0 9 6 5 4 2 61 0 5</p>
+<p>What are the roots of 3 and 7, respectively?</p>
+<p>Answer:</p>
+<p>6 and 6</p>
+<p>The root of 3 is 6: 3-&gt;5-&gt;2-&gt;6</p>
+<p>The root of 7 is 6: 7-&gt;1-&gt;9-&gt;5-&gt;2-&gt;6</p>
+<p><img src="/images/QuickUnion1.png" alt="QuickUnion1"> </p>
+<p>和Quick Find的区别在于，是用相同根节点来表示数组中相同的元素，并且有利于合并。在合并树的时候，只需要改变一个值，比如把p这个树合并到q中，只需要更改<code>id[9]</code>的值为6即可，这就意味着9这个结点的根节点是6，这样其他值就无需更改，减少了操作</p>
+<p>code:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">QuickUnionUF</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span>[] id;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">QuickUnionUF</span><span class="params">(<span class="keyword">int</span> N)</span> </span>&#123;</span><br><span class="line">    id = <span class="keyword">new</span> <span class="keyword">int</span>[N];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; i++)</span><br><span class="line">      id[i] = i;  <span class="comment">//set id of each to itself</span></span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">root</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;  <span class="comment">// chase parent pointers until reach root</span></span><br><span class="line">    <span class="keyword">while</span> (i != id[i]) </span><br><span class="line">      i = id[i];</span><br><span class="line">    <span class="keyword">return</span> i;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">cinnected</span><span class="params">(<span class="keyword">int</span> p, <span class="keyword">int</span> q)</span> </span>&#123; <span class="comment">//check if p and q have same root</span></span><br><span class="line">    <span class="keyword">return</span> root(p) == root(q);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">union</span><span class="params">(<span class="keyword">int</span> p, <span class="keyword">int</span> q)</span> </span>&#123;  <span class="comment">// change root of p to point to root of q</span></span><br><span class="line">    <span class="keyword">int</span> i = root(p);</span><br><span class="line">    <span class="keyword">int</span> j = root(q);</span><br><span class="line">    id[j] = j;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">algorithm</th>
+<th style="text-align:center">initialize</th>
+<th style="text-align:center">union</th>
+<th style="text-align:center">find</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">quick-find</td>
+<td style="text-align:center">N</td>
+<td style="text-align:center">N</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">quick-union</td>
+<td style="text-align:center">N</td>
+<td style="text-align:center">N</td>
+<td style="text-align:center">N</td>
+</tr>
+</tbody>
+</table>
+<p>to slow</p>
+<p>在查找一个高度很高的树时，每一次都需要回溯整棵树，浪费时间，每一次查找都是对数组的一次遍历</p>
+<h1 id="Quick-Union-Improvements"><a href="#Quick-Union-Improvements" class="headerlink" title="Quick-Union Improvements"></a>Quick-Union Improvements</h1><p>在实现quick-union的时候执行一些操作避免得到很高的树，如果一个大树和小树合并，避免将大树放在下面，那将会导致更高的树</p>
+<p>在带权算法中，总是将小的树放在下面</p>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://magaofei.github.io">mark</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://magaofei.github.io/2016/11/26/20.%20%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%AC%E4%B8%80%E8%8A%82/">https://magaofei.github.io/2016/11/26/20.%20%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%AC%E4%B8%80%E8%8A%82/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        
+        <nav class="post-nav"><a class="prev" href="/2016/12/06/21.%20Genymotion%20Android%E6%A8%A1%E6%8B%9F%E5%99%A8/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Genymotion Android模拟器</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    <a class="next" href="/2016/11/25/19.%20%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%8A%8A%E6%8F%92%E5%BA%A7%E5%8F%98%E9%87%8F%E5%A3%B0%E6%98%8E%E4%B8%BA%E5%BC%B1%E5%BC%95%E7%94%A8%EF%BC%9F/">
+        <span class="next-text nav-default">为什么要把插座变量声明为弱引用？</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"><div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:mamian521#email.com" class="iconfont icon-email" title="email"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">mark</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://magaofei.github.io/2016/11/26/20.%20%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%AC%E4%B8%80%E8%8A%82/';
+        this.page.identifier = '2016/11/26/20. 算法学习第一节/';
+        this.page.title = '算法学习第一节';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//wantme.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.6.0"></script>
+</body>
+</html>

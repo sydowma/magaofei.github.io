@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="部署Django"/><link rel="alternate" href="/atom.xml" title="马面的部落格"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.6.0" />
+<link rel="canonical" href="https://magaofei.github.io/2017/01/21/34. 部署Django/"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.6.0" />
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-86730422-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-86730422-1');
+</script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz",
+      appKey: "1i3I2spUT9rGlts0cWBGKLsv"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz","app_key":"1i3I2spUT9rGlts0cWBGKLsv"},"toc":"","fancybox":"","pjax":"","latex":""};
+</script>
+
+    <title>部署Django - 马面的部落格</title>
+  <meta name="generator" content="Hexo 4.2.1"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">马面的部落格</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">首页
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">归档
+          </li>
+      </a><a href="/tags">
+        <li class="mobile-menu-item">标签
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">马面的部落格</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            首页
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            归档
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            标签
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">部署Django
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-01-21
+        </span><span class="post-visits"
+             data-url="/2017/01/21/34.%20%E9%83%A8%E7%BD%B2Django/"
+             data-title="部署Django">
+          阅读次数 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h4 id="账户不在-sudoers-文件中"><a href="#账户不在-sudoers-文件中" class="headerlink" title="账户不在 sudoers 文件中"></a>账户不在 sudoers 文件中</h4><p>   1、切换到root用户权限</p>
+<p>[user@Compile ~]$ su root</p>
+<p>密码：</p>
+<pre><code>2、查看/etc/sudoers文件权限，如果只读权限，修改为可写权限
+</code></pre><p>[root@Compile user]# ls -l /etc/sudoers</p>
+<p>-r–r—–. 1 root root 4030 9月  25 00:57 /etc/sudoers</p>
+<p>[root@Compile user]# chmod 777 /etc/sudoers</p>
+<p>保存退出，并恢复/etc/sudoers的访问权限为440</p>
+<p>[root@Compile user]# chmod 440 /etc/sudoers</p>
+<h4 id="python升级带来的yum异常"><a href="#python升级带来的yum异常" class="headerlink" title="python升级带来的yum异常"></a>python升级带来的yum异常</h4><p>python升级后，发现yum无法使用了</p>
+<p>原因：这是因为yum采用python作为命令解释器，这可以从/usr/bin/yum文件中第一行#!/usr/bin/python发现。而python版本之间兼容性不太好，使得2.X版本与3.0版本之间存在语法不一致问题。而CentOS 5自带的yum采用的是python2.4，当系统将python升级到2.6或3.0后，出现语法解释错误。</p>
+<p>解决办法：</p>
+<p>很简单，一是升级yum，一是修改yum的解释器为旧版本python2.4（如果你没有采用覆盖升级的话）</p>
+<p>升级yum的作法就不详述了；</p>
+<p>修改yum的解释器为旧版本python2.4：</p>
+<p>vi /usr/bin/yum</p>
+<p>将第一行”#!/usr/bin/python” 改为 “#!/usr/bin/python2.4”即可</p>
+<p>####Loaded plugins: fastestmirror, langpacks问题</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Loaded plugins: fastestmirror, langpacks</span><br><span class="line">Loading mirror speeds <span class="keyword">from</span> cached hostfile</span><br><span class="line"> * epel: mirrors.neusoft.edu.cn</span><br><span class="line">  File <span class="string">"/usr/libexec/urlgrabber-ext-down"</span>, line <span class="number">28</span></span><br><span class="line">    <span class="keyword">except</span> OSError, e:</span><br><span class="line">                  ^</span><br><span class="line">SyntaxError: invalid syntax</span><br><span class="line">Exiting on user cancel</span><br></pre></td></tr></table></figure>
+<p>查看发现这个文件也依赖Python版本，修改为相同即可。修改如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">vim &#x2F;usr&#x2F;libexec&#x2F;urlgrabber-ext-down</span><br><span class="line">#! &#x2F;usr&#x2F;bin&#x2F;python2.7</span><br></pre></td></tr></table></figure>
+<h4 id="Apache2服务器的默认Log路径"><a href="#Apache2服务器的默认Log路径" class="headerlink" title="Apache2服务器的默认Log路径"></a>Apache2服务器的默认Log路径</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">/var/log/apache2/</span><br></pre></td></tr></table></figure>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://magaofei.github.io">mark</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://magaofei.github.io/2017/01/21/34.%20%E9%83%A8%E7%BD%B2Django/">https://magaofei.github.io/2017/01/21/34.%20%E9%83%A8%E7%BD%B2Django/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        
+        <nav class="post-nav"><a class="prev" href="/2017/01/22/35.%20iOS%E9%9D%A2%E8%AF%95%E9%A2%98/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">iOS面试题</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    <a class="next" href="/2017/01/18/33.%20Linux%E5%AE%89%E8%A3%85Python3/">
+        <span class="next-text nav-default">Linux安装Python3</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"><div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:mamian521#email.com" class="iconfont icon-email" title="email"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">mark</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://magaofei.github.io/2017/01/21/34.%20%E9%83%A8%E7%BD%B2Django/';
+        this.page.identifier = '2017/01/21/34. 部署Django/';
+        this.page.title = '部署Django';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//wantme.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.6.0"></script>
+</body>
+</html>

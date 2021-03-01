@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="更好的展示 JMeter HTML 报告"/><meta name="keywords" content="python, jmeter, 马面的部落格" /><link rel="alternate" href="/atom.xml" title="马面的部落格"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.6.0" />
+<link rel="canonical" href="https://magaofei.github.io/2018/05/23/49. 基于 Flask 展示所有的 JMeter HTML 报告/"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.6.0" />
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-86730422-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-86730422-1');
+</script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz",
+      appKey: "1i3I2spUT9rGlts0cWBGKLsv"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz","app_key":"1i3I2spUT9rGlts0cWBGKLsv"},"toc":"","fancybox":"","pjax":"","latex":""};
+</script>
+
+    <title>更好的展示 JMeter HTML 报告 - 马面的部落格</title>
+  <meta name="generator" content="Hexo 4.2.1"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">马面的部落格</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">首页
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">归档
+          </li>
+      </a><a href="/tags">
+        <li class="mobile-menu-item">标签
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">马面的部落格</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            首页
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            归档
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            标签
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">更好的展示 JMeter HTML 报告
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-05-23
+        </span><span class="post-visits"
+             data-url="/2018/05/23/49.%20%E5%9F%BA%E4%BA%8E%20Flask%20%E5%B1%95%E7%A4%BA%E6%89%80%E6%9C%89%E7%9A%84%20JMeter%20HTML%20%E6%8A%A5%E5%91%8A/"
+             data-title="更好的展示 JMeter HTML 报告">
+          阅读次数 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h2 id="Why-为什么要做这个"><a href="#Why-为什么要做这个" class="headerlink" title="Why ? 为什么要做这个"></a>Why ? 为什么要做这个</h2><p>JMeter 通常自带 HTML 报告展示, 但是依旧需要下载到本地观看, 当然你也可以直接在服务器上配置好 nginx 访问. 但是查找和切换时依旧不够方便, 例如不能展示所有的报告信息, 需要手动拼接访问链接. 本项目就是为了解决这个问题, 可以展示指定报告目录, 自动拼接URL, 点击即可访问</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>Python 查找指定目录下所有文件夹, Flask 部署 web 服务</p>
+<h2 id="效果图"><a href="#效果图" class="headerlink" title="效果图"></a>效果图</h2><h3 id="展示"><a href="#展示" class="headerlink" title="展示"></a>展示</h3><p><img src="http://os19wcerd.bkt.clouddn.com/20180523145744_j5mVxj_QQ20180523-145124.jpeg" alt=""></p>
+<h3 id="跳转后"><a href="#跳转后" class="headerlink" title="跳转后"></a>跳转后</h3><p><img src="http://os19wcerd.bkt.clouddn.com/20180523145758_8eU7Yh_QQ20180523-144233.jpeg" alt=""></p>
+<h2 id="GitHub-仓库"><a href="#GitHub-仓库" class="headerlink" title="GitHub 仓库"></a>GitHub 仓库</h2><p><a href="https://github.com/magaofei/jmeterWebReport" target="_blank" rel="noopener">https://github.com/magaofei/jmeterWebReport</a></p>
+<h4 id="Update-2018年06月05日"><a href="#Update-2018年06月05日" class="headerlink" title="Update 2018年06月05日"></a>Update 2018年06月05日</h4><p>使用 nginx 的 <code>autoindex</code> 即可</p>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://magaofei.github.io">mark</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://magaofei.github.io/2018/05/23/49.%20%E5%9F%BA%E4%BA%8E%20Flask%20%E5%B1%95%E7%A4%BA%E6%89%80%E6%9C%89%E7%9A%84%20JMeter%20HTML%20%E6%8A%A5%E5%91%8A/">https://magaofei.github.io/2018/05/23/49.%20%E5%9F%BA%E4%BA%8E%20Flask%20%E5%B1%95%E7%A4%BA%E6%89%80%E6%9C%89%E7%9A%84%20JMeter%20HTML%20%E6%8A%A5%E5%91%8A/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/python/">python</a>
+            <a href="/tags/jmeter/">jmeter</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2018/06/15/49.%20fabric2%E7%9A%84%E4%BD%BF%E7%94%A8/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">fabric2的使用</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    <a class="next" href="/2018/05/01/48.%20DockerForCentos/">
+        <span class="next-text nav-default">Docker For CentOS</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"><div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:mamian521#email.com" class="iconfont icon-email" title="email"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">mark</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://magaofei.github.io/2018/05/23/49.%20%E5%9F%BA%E4%BA%8E%20Flask%20%E5%B1%95%E7%A4%BA%E6%89%80%E6%9C%89%E7%9A%84%20JMeter%20HTML%20%E6%8A%A5%E5%91%8A/';
+        this.page.identifier = '2018/05/23/49. 基于 Flask 展示所有的 JMeter HTML 报告/';
+        this.page.title = '更好的展示 JMeter HTML 报告';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//wantme.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.6.0"></script>
+</body>
+</html>

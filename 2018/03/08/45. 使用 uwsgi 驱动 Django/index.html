@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="使用 uwsgi 驱动 Django 应用"/><meta name="keywords" content="django, 马面的部落格" /><link rel="alternate" href="/atom.xml" title="马面的部落格"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.6.0" />
+<link rel="canonical" href="https://magaofei.github.io/2018/03/08/45. 使用 uwsgi 驱动 Django/"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.6.0" />
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-86730422-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-86730422-1');
+</script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz",
+      appKey: "1i3I2spUT9rGlts0cWBGKLsv"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz","app_key":"1i3I2spUT9rGlts0cWBGKLsv"},"toc":"","fancybox":"","pjax":"","latex":""};
+</script>
+
+    <title>使用 uwsgi 驱动 Django 应用 - 马面的部落格</title>
+  <meta name="generator" content="Hexo 4.2.1"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">马面的部落格</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">首页
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">归档
+          </li>
+      </a><a href="/tags">
+        <li class="mobile-menu-item">标签
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">马面的部落格</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            首页
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            归档
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            标签
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">使用 uwsgi 驱动 Django 应用
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-03-08
+        </span><span class="post-visits"
+             data-url="/2018/03/08/45.%20%E4%BD%BF%E7%94%A8%20uwsgi%20%E9%A9%B1%E5%8A%A8%20Django/"
+             data-title="使用 uwsgi 驱动 Django 应用">
+          阅读次数 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="使用-uwsgi-驱动-Django-应用"><a href="#使用-uwsgi-驱动-Django-应用" class="headerlink" title="使用 uwsgi 驱动 Django 应用"></a>使用 uwsgi 驱动 Django 应用</h1><p>个人认为 uwsgi 是用来对部署的应用进行进程管理的，接收 <code>nginx/apache</code> 转发来的请求，分配进程通过 <code>uwsgi</code> 协议调起应用。类似于 Tomcat 等应用。</p>
+<h4 id="安装和配置-uwsgi"><a href="#安装和配置-uwsgi" class="headerlink" title="安装和配置 uwsgi"></a>安装和配置 uwsgi</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pip install uwsgi</span><br></pre></td></tr></table></figure>
+<p>这里用 <code>Django</code> 举例</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 如果使用了虚拟环境，记得先切换虚拟环境</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> project_path 替换成你自己的目录名</span></span><br><span class="line">uwsgi --socket 127.0.0.1:7000 --wsgi-file project_path/wsgi.py</span><br></pre></td></tr></table></figure>
+<p>这是一个最简单的启动配置，可以先尝试服务能不能正常启动，随后我们会给一个配置文件。</p>
+<a id="more"></a>
+<h4 id="配置-nginx"><a href="#配置-nginx" class="headerlink" title="配置 nginx"></a>配置 nginx</h4><figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="comment"># project_path 替换为你自己的目录</span></span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span>      <span class="number">80</span>;</span><br><span class="line">    <span class="attribute">listen</span>     [::]:<span class="number">80</span>;</span><br><span class="line">    <span class="attribute">server_name</span> example.com;</span><br><span class="line">    <span class="attribute">root</span> project_path;</span><br><span class="line">    <span class="attribute">index</span> project_path/app/index.html;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">access_log</span>  /data/nginx_logs/example.access.log;</span><br><span class="line">    <span class="attribute">error_log</span>   /data/nginx_logs/example.<span class="literal">error</span>.log;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 静态资源文件配置</span></span><br><span class="line">    <span class="attribute">location</span> /static &#123;</span><br><span class="line">        <span class="attribute">alias</span> project_path/static/project;</span><br><span class="line">        <span class="attribute">expires</span>    <span class="number">3h</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">location</span> / &#123;</span><br><span class="line">        <span class="attribute">uwsgi_pass</span> <span class="number">127.0.0.1:7000</span>;</span><br><span class="line">        <span class="attribute">include</span> uwsgi_params;</span><br><span class="line">        <span class="attribute">uwsgi_param</span> UWSGI_PYHOME project_path/env;</span><br><span class="line">        <span class="attribute">uwsgi_param</span> UWSGI_CHDIR  project_path;</span><br><span class="line">       </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过设置 <code>nginx</code> 的 <code>listen</code> <code>server_name</code>指定端口和域名，<code>location</code> 里面的 <code>/static</code> 设置静态文件，因为我们将静态文件放在了项目目录里。</p>
+<p><code>uwsgi_pass</code> 将转发到指定端口，由 <code>uwsgi</code>接收</p>
+<p>接着启动 <code>nginx</code> 或重新加载就可以了。</p>
+<h4 id="uwsgi-详细配置"><a href="#uwsgi-详细配置" class="headerlink" title="uwsgi 详细配置"></a>uwsgi 详细配置</h4><figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="comment"># config.ini</span></span><br><span class="line"><span class="comment"># 注意，在 Windows 上更改此文件时一定确保编码为 UTF-8</span></span><br><span class="line"><span class="section">[uwsgi]</span></span><br><span class="line"><span class="attr">socket</span> = <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">7000</span></span><br><span class="line"><span class="comment"># uwsgi 启动时所使用的地址与端口</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 指向网站目录  绝对路径</span></span><br><span class="line"><span class="attr">chdir</span> = project_path</span><br><span class="line"></span><br><span class="line"><span class="comment"># python 启动程序文件，替换成自己的名称</span></span><br><span class="line"><span class="attr">module</span> = project.wsgi:application</span><br><span class="line"></span><br><span class="line"><span class="attr">pidfile</span> = /data/uwsgi_logs/project_name.pid</span><br><span class="line"></span><br><span class="line"><span class="attr">logto</span> = /data/uwsgi_logs/project_name.log</span><br><span class="line"></span><br><span class="line"><span class="comment"># 一个 worker 进程接收 1000 请求</span></span><br><span class="line"><span class="attr">max-requests</span>=<span class="number">1000</span></span><br><span class="line"></span><br><span class="line"><span class="attr">virtualenv</span> = env</span><br><span class="line"></span><br><span class="line"><span class="attr">pythonpath</span> = .</span><br><span class="line"></span><br><span class="line"><span class="comment"># python 程序内用以启动的 application 变量名</span></span><br><span class="line"><span class="attr">callable</span> = application</span><br><span class="line"></span><br><span class="line"><span class="comment"># 处理器数</span></span><br><span class="line"><span class="comment">; processes = 5</span></span><br><span class="line"><span class="attr">workers</span> = <span class="number">4</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置“harakiri ”的超时</span></span><br><span class="line"><span class="attr">harakiri</span> = <span class="number">60</span></span><br><span class="line"></span><br><span class="line"><span class="attr">enable-threads</span> = <span class="literal">true</span> <span class="comment">#允许用内嵌的语言启动线程。这将允许你在app程序中产生一个子线程</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 线程数</span></span><br><span class="line"><span class="attr">threads</span> = <span class="number">3</span></span><br><span class="line"></span><br><span class="line"><span class="attr">master</span> = <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#状态检测地址</span></span><br><span class="line"><span class="attr">stats</span> = <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">9191</span></span><br></pre></td></tr></table></figure>
+<h5 id="从-ini-文件加载-uwsgi-配置"><a href="#从-ini-文件加载-uwsgi-配置" class="headerlink" title="从 ini 文件加载 uwsgi 配置"></a>从 ini 文件加载 uwsgi 配置</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">uwsgi config.ini</span><br></pre></td></tr></table></figure>
+<p>执行完毕就，就可以关闭终端了，uwsgi 会一直在后台运行</p>
+<h4 id="uwsgi-常用命令"><a href="#uwsgi-常用命令" class="headerlink" title="uwsgi 常用命令"></a>uwsgi 常用命令</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> reload</span></span><br><span class="line">uwsgi --reload /data/uwsgi_logs/project_name.pid</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 强制关闭</span></span><br><span class="line">uwsgi killall -s KILL INI /data/tool/env/bin/uwsgi</span><br></pre></td></tr></table></figure>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://magaofei.github.io">mark</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://magaofei.github.io/2018/03/08/45.%20%E4%BD%BF%E7%94%A8%20uwsgi%20%E9%A9%B1%E5%8A%A8%20Django/">https://magaofei.github.io/2018/03/08/45.%20%E4%BD%BF%E7%94%A8%20uwsgi%20%E9%A9%B1%E5%8A%A8%20Django/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/django/">django</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2018/03/10/46.%20Python%20Code%20Style/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Python Code Style</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    <a class="next" href="/2018/03/08/44.%20%E5%88%A9%E7%94%A8%20Nginx%20%E5%B1%95%E7%A4%BA%20JMeter%20%E6%8A%A5%E5%91%8A/">
+        <span class="next-text nav-default">利用 Nginx 展示 JMeter 报告</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"><div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:mamian521#email.com" class="iconfont icon-email" title="email"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">mark</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://magaofei.github.io/2018/03/08/45.%20%E4%BD%BF%E7%94%A8%20uwsgi%20%E9%A9%B1%E5%8A%A8%20Django/';
+        this.page.identifier = '2018/03/08/45. 使用 uwsgi 驱动 Django/';
+        this.page.title = '使用 uwsgi 驱动 Django 应用';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//wantme.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.6.0"></script>
+</body>
+</html>

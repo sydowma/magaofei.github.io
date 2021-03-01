@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="关于 iPhone App 设计的几点看法和总结"/><link rel="alternate" href="/atom.xml" title="马面的部落格"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.6.0" />
+<link rel="canonical" href="https://magaofei.github.io/2016/12/20/28. 关于-iPhone-App-设计的几点看法和总结/"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.6.0" />
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-86730422-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-86730422-1');
+</script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz",
+      appKey: "1i3I2spUT9rGlts0cWBGKLsv"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"U8yQE4F47ieQpwPbbFodk8IX-gzGzoHsz","app_key":"1i3I2spUT9rGlts0cWBGKLsv"},"toc":"","fancybox":"","pjax":"","latex":""};
+</script>
+
+    <title>关于 iPhone App 设计的几点看法和总结 - 马面的部落格</title>
+  <meta name="generator" content="Hexo 4.2.1"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">马面的部落格</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">首页
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">归档
+          </li>
+      </a><a href="/tags">
+        <li class="mobile-menu-item">标签
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">马面的部落格</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            首页
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            归档
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            标签
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">关于 iPhone App 设计的几点看法和总结
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016-12-20
+        </span><span class="post-visits"
+             data-url="/2016/12/20/28.%20%E5%85%B3%E4%BA%8E-iPhone-App-%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%87%A0%E7%82%B9%E7%9C%8B%E6%B3%95%E5%92%8C%E6%80%BB%E7%BB%93/"
+             data-title="关于 iPhone App 设计的几点看法和总结">
+          阅读次数 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="关于-iPhone-App-设计的几点看法和总结"><a href="#关于-iPhone-App-设计的几点看法和总结" class="headerlink" title="关于 iPhone App 设计的几点看法和总结"></a>关于 iPhone App 设计的几点看法和总结</h1><p>有几个原则</p>
+<ol>
+<li><p>比如不要使用高优先级的东西,</p>
+<p>比如提示用户时, 用一个HUD显示就比Alert强制用户观看的体验要好, 同理, 你在微信朋友圈点击那个评论图标时, 不是使用的弹窗, 而是在原来区域做的改变, 这点影响就有了良好的用户体验, 不警示用户, 优秀的设计就是这样, 粗略的设计就是将信息粗暴的反馈给用户, 而不管合不合理, 我们应当将反馈分级别的呈现, 而不是一以贯之.</p>
+</li>
+<li><p>一贯性的图标</p>
+<p>图标是用户每天接触App最多的东西, 极大的影响和吸引用户, 正因为如此, 有不少App愿意把活动呈现在此, 比如阿里系的App, 这很明显是为了运营, 但这影响到了用户体验, 就不应该去做, 如果阿里真的把用户放在第一位, 就不应该干这样的事</p>
+</li>
+<li><p>遵循官方推荐的设计</p>
+<p>一个平台有着自己的设计理念,在这个平台中的产品最好能做到一致, 这样用户在使用就能够方便的上手, 让用户方便上手, 自然也能够留住用户</p>
+</li>
+<li><p>不要大的改变, 只需要增增补补</p>
+<p>一款产品忌讳频繁的改变, 我举个支付宝的例子, 最早只是一款钱包App, 后来越来越重, 沉重的同时也频繁改版, 直到现在你也不知道他会改到哪里去, 但有一点是肯定的, 就是需求是不断变化的, 呵呵. 不断改版的同时也意味着, 没想清楚. </p>
+<p>每一次改版都加大了老用户的上手程度和管理的混乱, 导致用户对升级新的版本没有兴趣</p>
+</li>
+<li><p>多用原生</p>
+<p>现在有跨平台开发解决方案, 但还不够成熟, 关键是体验不太好, 建议多用原生</p>
+<p>​</p>
+</li>
+</ol>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://magaofei.github.io">mark</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://magaofei.github.io/2016/12/20/28.%20%E5%85%B3%E4%BA%8E-iPhone-App-%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%87%A0%E7%82%B9%E7%9C%8B%E6%B3%95%E5%92%8C%E6%80%BB%E7%BB%93/">https://magaofei.github.io/2016/12/20/28.%20%E5%85%B3%E4%BA%8E-iPhone-App-%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%87%A0%E7%82%B9%E7%9C%8B%E6%B3%95%E5%92%8C%E6%80%BB%E7%BB%93/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        
+        <nav class="post-nav"><a class="prev" href="/2016/12/21/29.%20sqlite-for-iOS%E7%8A%AF%E7%9A%84%E9%94%992016%E5%B9%B412%E6%9C%8821%E6%97%A5/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">sqlite for iOS犯的错2016年12月21日</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    <a class="next" href="/2016/12/15/27.%20iOS%E9%9D%A2%E8%AF%95/">
+        <span class="next-text nav-default">iOS面试题总结</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"><div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:mamian521#email.com" class="iconfont icon-email" title="email"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even" target="_blank" rel="noopener">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">mark</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://magaofei.github.io/2016/12/20/28.%20%E5%85%B3%E4%BA%8E-iPhone-App-%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%87%A0%E7%82%B9%E7%9C%8B%E6%B3%95%E5%92%8C%E6%80%BB%E7%BB%93/';
+        this.page.identifier = '2016/12/20/28. 关于-iPhone-App-设计的几点看法和总结/';
+        this.page.title = '关于 iPhone App 设计的几点看法和总结';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//wantme.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.6.0"></script>
+</body>
+</html>
